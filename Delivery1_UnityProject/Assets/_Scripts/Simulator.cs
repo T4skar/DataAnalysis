@@ -55,9 +55,7 @@ public class Simulator : MonoBehaviour
             int rdm = Random.Range(0, coutryNames.Length);
             Countries.Add(((AllCountries)rdm).ToString());
         }
-        MakeOnePlayer();
-       
-     
+        MakeOnePlayer();    
     }
 
     void MakeOnePlayer()
@@ -67,15 +65,11 @@ public class Simulator : MonoBehaviour
         {
             Debug.Log("Finished");
             return;
-        }
-            
+        }  
 
         _currentDate = GetNewPlayerDate();
         AddNewPlayer(_currentDate);
     }
-
-    
-   
 
     void AddNewPlayer(DateTime dateTime)
     {
@@ -128,8 +122,6 @@ public class Simulator : MonoBehaviour
         return 5;
 
     }
-
-
 
     #region Probabilistic values
     DateTime GetNewPlayerDate()
