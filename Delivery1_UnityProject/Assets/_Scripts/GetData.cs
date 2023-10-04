@@ -29,13 +29,19 @@ public class GetData : MonoBehaviour
     
     private IEnumerator SendPlayerData(string playerName, string playerCountry, DateTime time)
     {
-        using (UnityWebRequest www = UnityWebRequest.Post("https://www.my-server.com/myapi", "{ \"PlayerName\": " + playerName + ", \"PlayerCountry\":" + playerCountry + ", \"PlayerCountry\":" + time.ToString() + " }", "application/json"))
+        string url = "https://citmalumnes.upc.es/~xavierlm9/Session2.php"; 
+        //string url = "www.google.com";
+        WWWForm form = new WWWForm();
+        form.AddField("name", playerName);
+        form.AddField("country", playerCountry);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(url,form ))
         {
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log(www.error);
+                Debug.Log("error: "+www.error);
             }
             else
             {
