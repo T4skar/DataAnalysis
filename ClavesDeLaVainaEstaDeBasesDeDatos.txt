@@ -7,4 +7,6 @@ albertml1        VMbB38twR3xP
 
 xavierlm9        zMpmB6Drtvc2
 
-xaviercb12       8QGQefMvS38H
+xaviercb12	8QGQefMvS38H
+
+INSERT INTO `Users`( `User_Name`, `User_Age`, `User_Gender`, `User_Country`, `Sign_Up_Time`) VALUES ("lolo",23,"F","Spain",'1998-01-23 12:45:56')
