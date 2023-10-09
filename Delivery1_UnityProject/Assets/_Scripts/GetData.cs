@@ -20,32 +20,34 @@ public class GetData : MonoBehaviour
         Simulator.OnEndSession -= Simulator_OnEndSession;
     }
 
-    private void Simulator_OnNewPlayer(string playerName, string playerCountry, DateTime time)
+    private void Simulator_OnNewPlayer(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
     {
-        //string[] a = { playerName , playerCountry , };
-        //StartCoroutine(SendPlayerData(playerName, playerCountry, time));
-        StartCoroutine(SendPlayerData(playerName, playerCountry, time));
+        StartCoroutine(SendPlayerData(playerName, playerAge, playerGender, playerCountry, signUpTime));
     }
     
-    private IEnumerator SendPlayerData(string playerName, string playerCountry, DateTime time)
+    private IEnumerator SendPlayerData(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
     {
-        string url = "https://citmalumnes.upc.es/~xavierlm9/Session2.php"; 
+        string url = "https://citmalumnes.upc.es/~xaviercb12/Sessions.php"; 
         //string url = "www.google.com";
         WWWForm form = new WWWForm();
-        form.AddField("name", playerName);
-        form.AddField("country", playerCountry);
+        form.AddField("playerName", playerName);
+        form.AddField("playerAge", playerAge);
+        form.AddField("playerGender", playerGender);
+        form.AddField("playerCountry", playerCountry);
+        form.AddField("signUpTime", signUpTime.ToString("YYYY-MM-DD hh:mm:ss"));
 
-        using (UnityWebRequest www = UnityWebRequest.Post(url,form ))
+        using (UnityWebRequest www = UnityWebRequest.Post(url,form))
         {
             yield return www.SendWebRequest();
 
             if (www.result != UnityWebRequest.Result.Success)
             {
-                Debug.Log("error: "+www.error);
+                Debug.Log("Error: " + www.error);
             }
             else
             {
                 Debug.Log("Form upload complete!");
+                Debug.Log(www.downloadHandler.text);
             }
         }
     }

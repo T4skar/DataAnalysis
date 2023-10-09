@@ -1,4 +1,5 @@
-phpMyAdming	
+https://citmalumnes.upc.es/phpmyadmin/	
+https://citmalumnes.upc.es/~xaviercb12/
 
 danieltr1        aLZsQgYa6q9q
 
@@ -6,4 +7,4 @@ albertml1        VMbB38twR3xP
 
 xavierlm9        zMpmB6Drtvc2
 
-xaviercb12        8QGQefMvS38H
+xaviercb12       8QGQefMvS38H

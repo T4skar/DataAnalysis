@@ -7,7 +7,8 @@ using Random = UnityEngine.Random;
 public class Simulator : MonoBehaviour
 {
 
-    public static Action<string,string,DateTime> OnNewPlayer; //Name, Country and date
+    public static Action<string,int, string ,string, DateTime> OnNewPlayer; //Name, Country and date
+    //(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
     public static Action<DateTime> OnNewSession;
     public static Action<DateTime> OnEndSession;
     public static Action<int, DateTime> OnBuyItem; //Item id and date
@@ -76,8 +77,11 @@ public class Simulator : MonoBehaviour
         string name = namegen.GetNextRandomName();
         int rdm = Random.Range(0, Countries.Count);
         string country = Countries[rdm];
+        int age = Random.Range(9, 99);
+        float rdm2 = Random.value;
+        string gender = rdm2 < 0.4f ? "F" : rdm2 < 0.8f ? "M" : "NB";
 
-        OnNewPlayer?.Invoke(name, country, dateTime);
+        OnNewPlayer?.Invoke(name, age, gender, country, dateTime);
     }
 
     void AddNewSession()
