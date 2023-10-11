@@ -1,5 +1,6 @@
 https://citmalumnes.upc.es/phpmyadmin/	
 https://citmalumnes.upc.es/~xaviercb12/
+sftp://citmalumnes.upc.es
 
 danieltr1        aLZsQgYa6q9q
 
