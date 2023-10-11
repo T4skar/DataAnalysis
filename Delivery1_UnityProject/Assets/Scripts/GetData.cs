@@ -34,7 +34,7 @@ public class GetData : MonoBehaviour
         form.AddField("playerAge", playerAge);
         form.AddField("playerGender", playerGender);
         form.AddField("playerCountry", playerCountry);
-        form.AddField("signUpTime", signUpTime.ToString("YYYY-MM-DD hh:mm:ss"));
+        form.AddField("signUpTime", signUpTime.ToString("yyyy-MM-dd HH:mm:ss"));
 
         using (UnityWebRequest www = UnityWebRequest.Post(url,form))
         {
