@@ -32,10 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         return;
     }
 
-    echo "Connection done correctly";
+    echo "Connection done correctly\n";
     
 
-    $sql = "INSERT INTO Users ( User_Name, User_Age, User_Gender, User_Country, Sign_Up_Time) VALUES ('lolo',23,'F','Spain','1998-01-23 12:45:56')";
+    $sql = "INSERT INTO Users ( User_Name, User_Age, User_Gender, User_Country, Sign_Up_Time) VALUES ('$playerName',$playerAge,'$playerGender','$playerCountry','$signUpTime')";
 
     if (mysqli_query($conn, $sql)) {
         echo "Datos insertados con éxito";
