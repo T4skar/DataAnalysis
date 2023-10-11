@@ -35,7 +35,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo "Connection done correctly";
     
 
-    $sql = "INSERT INTO Users ( `User_Name`, `User_Age`, `User_Gender`, `User_Country`, `Sign_Up_Time`) VALUES ("lolo",23,"F","Spain",'1998-01-23 12:45:56')";
+    $sql = "INSERT INTO Users ( User_Name, User_Age, User_Gender, User_Country, Sign_Up_Time) VALUES ('lolo',23,'F','Spain','1998-01-23 12:45:56')";
+
+    if (mysqli_query($conn, $sql)) {
+        echo "Datos insertados con éxito";
+    } else {
+        echo "Error al insertar datos: " . mysqli_error($conn);
+    }
 
     $conn->close();
     // Realizar acciones con los datos, por ejemplo, guardarlos en una base de datos
