@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -11,6 +12,13 @@ public class GetData : MonoBehaviour
         Simulator.OnNewPlayer += Simulator_OnNewPlayer;
         Simulator.OnNewSession += Simulator_OnNewSession;
         Simulator.OnEndSession += Simulator_OnEndSession;
+
+        Simulator.GetPlayerID += GetPlayerID();
+    }
+
+    private void GetPlayerID()
+    {
+        StartCoroutine(ObtainUserID());
     }
 
     void OnDisable()
@@ -50,6 +58,29 @@ public class GetData : MonoBehaviour
                 Debug.Log(www.downloadHandler.text);
             }
         }
+    }
+
+    IEnumerator ObtainUserID()
+    {
+        /*
+        using (UnityWebRequest www = UnityWebRequest.Get("URL_de_tu_script_php.php"))
+        {
+            yield return www.SendWebRequest();
+
+            if (www.isNetworkError || www.isHttpError)
+            {
+                Debug.Log("Error: " + www.error);
+            }
+            else
+            {
+                string jsonResult = www.downloadHandler.text;
+                // Analiza el JSON para obtener el valor
+                var result = JsonUtility.FromJson<MyData>(jsonResult);
+                Debug.Log("Valor: " + result.valor);
+            }
+        }
+        */
+        yield return null;
     }
 
     private void Simulator_OnNewSession(DateTime time)

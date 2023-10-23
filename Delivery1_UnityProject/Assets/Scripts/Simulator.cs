@@ -13,6 +13,8 @@ public class Simulator : MonoBehaviour
     public static Action<DateTime> OnEndSession;
     public static Action<int, DateTime> OnBuyItem; //Item id and date
 
+    public static Action GetPlayerID;
+
     private DateTime _currentDate;
 
     public int MaxPlayers=100;
@@ -166,6 +168,7 @@ public class Simulator : MonoBehaviour
     #region callback subscribers
     private void OnPlayerAdded(uint obj)
     {
+
         AddNewSession();
     }
     private void OnNewSessionAdded(uint obj)
