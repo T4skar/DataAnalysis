@@ -15,20 +15,24 @@
 
  $conn;
 
-function ConnectToServer() 
+$debugMessages = "";
+
+ function ConnectToServer() 
 {
+    global $debugMessages;
+
     global $servername, $username, $password, $dbname;
     global $conn;
     
     $conn = new mysqli($servername, $username, $password, $dbname);
 
     if ($conn->connect_error) {
-        die("Conexión fallida: " . $conn->connect_error);
-        echo "Connection failed";
-        return false;
+        $debugMessages .= "Conexión fallida: " . $conn->connect_error;
+        die($debugMessages);
     }
 
-    echo "Connection done correctly\n";
+    $debugMessages .= "Connection done correctly\n";
+    echo $debugMessages;
 
     return true;
 }
@@ -41,12 +45,43 @@ function CloseConnection()
 
 /* `xaviercb12`.`Sessions` */
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    global $debugMessages;
+    
+    $debugMessages = "PHP: ";
+
+    $methodToCall = $_POST["methodToCall"];
+
+    switch($methodToCall){
+        case "CreatePlayer":
+            CreatePlayer();
+            break;
+
+        case "GetPlayerID":
+            GetPlayerID();
+            break;
+    }
+
+    // Realizar acciones con los datos, por ejemplo, guardarlos en una base de datos
+    // o realizar algún otro procesamiento
+
+    // Enviar una respuesta de vuelta a Unity
+    
+} else {
+    $debugMessages .= "Método no permitido \n";
+    echo $debugMessages;
+}
+
+function CreatePlayer() {
     // Acceder a los datos enviados desde Unity
     $playerName = $_POST["playerName"];
     $playerAge = $_POST["playerAge"];
     $playerGender = $_POST["playerGender"];
     $playerCountry = $_POST["playerCountry"];
     $signUpTime = $_POST["signUpTime"];
+
+    global $conn;
+    global $debugMessages;
 
     if(ConnectToServer() == false){
         return;
@@ -55,20 +90,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sql = "INSERT INTO Users ( User_Name, User_Age, User_Gender, User_Country, Sign_Up_Time) VALUES ('$playerName',$playerAge,'$playerGender','$playerCountry','$signUpTime')";
 
     if (mysqli_query($conn, $sql)) {
-        echo "Datos insertados con éxito";
+        $debugMessages .= "Datos insertados con éxito \n";
+        echo $debugMessages;
     } else {
-        echo "Error al insertar datos: " . mysqli_error($conn);
+        $debugMessages .= "Error al insertar datos: " . mysqli_error($conn) + "\n";
+        echo $debugMessages;
     }
 
     CloseConnection();
-
-    // Realizar acciones con los datos, por ejemplo, guardarlos en una base de datos
-    // o realizar algún otro procesamiento
-
-    // Enviar una respuesta de vuelta a Unity
-    
-} else {
-    echo "Método no permitido";
 }
 
 function GetPlayerID() {
@@ -77,7 +106,7 @@ function GetPlayerID() {
         return;
     }
     
-    $sql = "SELECT columna_deseada FROM nombre_de_la_tabla WHERE condición";
+    $sql = "SELECT User_Id FROM Users WHERE condición";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

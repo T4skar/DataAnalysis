@@ -7,6 +7,10 @@ using UnityEngine.Networking;
 
 public class GetData : MonoBehaviour
 {
+    //https://docs.unity3d.com/es/530/Manual/UnityWebRequest.html
+
+    [SerializeField] string phpUrl = "https://citmalumnes.upc.es/~xaviercb12/Sessions.php";
+
     void OnEnable()
     {
         Simulator.OnNewPlayer += Simulator_OnNewPlayer;
@@ -35,16 +39,23 @@ public class GetData : MonoBehaviour
     
     private IEnumerator SendPlayerData(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
     {
-        string url = "https://citmalumnes.upc.es/~xaviercb12/Sessions.php"; 
-        //string url = "www.google.com";
         WWWForm form = new WWWForm();
+
+        form.AddField("methodToCall", "CreatePlayer");
+
         form.AddField("playerName", playerName);
         form.AddField("playerAge", playerAge);
         form.AddField("playerGender", playerGender);
         form.AddField("playerCountry", playerCountry);
         form.AddField("signUpTime", signUpTime.ToString("yyyy-MM-dd HH:mm:ss"));
 
-        using (UnityWebRequest www = UnityWebRequest.Post(url,form))
+        yield return SendToPHP(form);
+
+    }
+
+    private IEnumerator SendToPHP(WWWForm form) 
+    {
+        using (UnityWebRequest www = UnityWebRequest.Post(phpUrl, form))
         {
             yield return www.SendWebRequest();
 
@@ -62,12 +73,15 @@ public class GetData : MonoBehaviour
 
     IEnumerator ObtainUserID()
     {
-        /*
-        using (UnityWebRequest www = UnityWebRequest.Get("URL_de_tu_script_php.php"))
+        WWWForm form = new WWWForm();
+
+        form.AddField("methodToCall", "GetPlayerID");
+
+        using (UnityWebRequest www = UnityWebRequest.Get(phpUrl))
         {
             yield return www.SendWebRequest();
 
-            if (www.isNetworkError || www.isHttpError)
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
             {
                 Debug.Log("Error: " + www.error);
             }
@@ -75,11 +89,11 @@ public class GetData : MonoBehaviour
             {
                 string jsonResult = www.downloadHandler.text;
                 // Analiza el JSON para obtener el valor
-                var result = JsonUtility.FromJson<MyData>(jsonResult);
-                Debug.Log("Valor: " + result.valor);
+                var result = JsonUtility.FromJson<int>(jsonResult);
+                Debug.Log("Valor: " + result);
             }
         }
-        */
+
         yield return null;
     }
 
@@ -92,10 +106,4 @@ public class GetData : MonoBehaviour
     {
 
     }
-
-
-
-
-    //https://docs.unity3d.com/es/530/Manual/UnityWebRequest.html
-
 }
