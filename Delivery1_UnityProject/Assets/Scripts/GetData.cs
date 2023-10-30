@@ -13,7 +13,7 @@ public class GetData : MonoBehaviour
         Simulator.OnNewSession += Simulator_OnNewSession;
         Simulator.OnEndSession += Simulator_OnEndSession;
 
-        Simulator.GetPlayerID += GetPlayerID();
+        Simulator.GetPlayerID += GetPlayerID;
     }
 
     private void GetPlayerID()
