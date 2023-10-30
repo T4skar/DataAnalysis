@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     global $debugMessages;
     
-    $debugMessages = "PHP: ";
+    $debugMessages = "";
 
     $methodToCall = $_POST["methodToCall"];
 
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Enviar una respuesta de vuelta a Unity
     
 } else {
-    $debugMessages .= "Método no permitido \n";
+    $debugMessages .= "PHP: Método no permitido \n";
     echo $debugMessages;
 }
 
@@ -90,10 +90,11 @@ function CreatePlayer() {
     $sql = "INSERT INTO Users ( User_Name, User_Age, User_Gender, User_Country, Sign_Up_Time) VALUES ('$playerName',$playerAge,'$playerGender','$playerCountry','$signUpTime')";
 
     if (mysqli_query($conn, $sql)) {
-        $debugMessages .= "Datos insertados con éxito. User ID: " . $conn->insert_id . "\n";
+        $debugMessages .= "PHP: Datos insertados con éxito. User ID: " . $conn->insert_id . "\n";
         echo $debugMessages;
+        echo $conn->insert_id;
     } else {
-        $debugMessages .= "Error al insertar datos: " . mysqli_error($conn) + "\n";
+        $debugMessages .= "PHP: Error al insertar datos: " . mysqli_error($conn) + "\n";
         echo $debugMessages;
     }
 

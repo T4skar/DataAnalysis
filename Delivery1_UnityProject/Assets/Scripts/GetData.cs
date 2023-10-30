@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -10,6 +11,8 @@ public class GetData : MonoBehaviour
     //https://docs.unity3d.com/es/530/Manual/UnityWebRequest.html
 
     [SerializeField] string phpUrl = "https://citmalumnes.upc.es/~xaviercb12/Sessions.php";
+
+    [SerializeField] string temporalID;
 
     void OnEnable()
     {
@@ -66,7 +69,11 @@ public class GetData : MonoBehaviour
             else
             {
                 Debug.Log("Form upload complete!");
-                Debug.Log(www.downloadHandler.text);
+
+                if(!Regex.IsMatch(www.downloadHandler.text, @"PHP:")){
+                    temporalID = www.downloadHandler.text;
+                }
+                Debug.Log(temporalID);
             }
         }
     }
