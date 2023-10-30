@@ -90,7 +90,7 @@ function CreatePlayer() {
     $sql = "INSERT INTO Users ( User_Name, User_Age, User_Gender, User_Country, Sign_Up_Time) VALUES ('$playerName',$playerAge,'$playerGender','$playerCountry','$signUpTime')";
 
     if (mysqli_query($conn, $sql)) {
-        $debugMessages .= "Datos insertados con éxito \n";
+        $debugMessages .= "Datos insertados con éxito. User ID: " . $conn->insert_id . "\n";
         echo $debugMessages;
     } else {
         $debugMessages .= "Error al insertar datos: " . mysqli_error($conn) + "\n";
@@ -102,11 +102,13 @@ function CreatePlayer() {
 
 function GetPlayerID() {
 
+    global $conn;
+
     if(!ConnectToServer()){
         return;
     }
     
-    $sql = "SELECT User_Id FROM Users WHERE condición";
+    $sql = "SELECT * FROM Users WHERE User_Id = (SELECT MAX(User_Id) FROM Users)";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

@@ -17,13 +17,13 @@ public class GetData : MonoBehaviour
         Simulator.OnNewSession += Simulator_OnNewSession;
         Simulator.OnEndSession += Simulator_OnEndSession;
 
-        Simulator.GetPlayerID += GetPlayerID;
+        //Simulator.GetPlayerID += GetPlayerID;
     }
 
-    private void GetPlayerID()
-    {
-        StartCoroutine(ObtainUserID());
-    }
+    //private void GetPlayerID()
+    //{
+    //    StartCoroutine(ObtainUserID());
+    //}
 
     void OnDisable()
     {
@@ -71,31 +71,31 @@ public class GetData : MonoBehaviour
         }
     }
 
-    IEnumerator ObtainUserID()
-    {
-        WWWForm form = new WWWForm();
+    //IEnumerator ObtainUserID()
+    //{
+    //    WWWForm form = new WWWForm();
 
-        form.AddField("methodToCall", "GetPlayerID");
+    //    form.AddField("methodToCall", "GetPlayerID");
 
-        using (UnityWebRequest www = UnityWebRequest.Get(phpUrl))
-        {
-            yield return www.SendWebRequest();
+    //    using (UnityWebRequest www = UnityWebRequest.Get(phpUrl))
+    //    {
+    //        yield return www.SendWebRequest();
 
-            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
-            {
-                Debug.Log("Error: " + www.error);
-            }
-            else
-            {
-                string jsonResult = www.downloadHandler.text;
-                // Analiza el JSON para obtener el valor
-                var result = JsonUtility.FromJson<int>(jsonResult);
-                Debug.Log("Valor: " + result);
-            }
-        }
+    //        if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+    //        {
+    //            Debug.Log("Error: " + www.error);
+    //        }
+    //        else
+    //        {
+    //            string jsonResult = www.downloadHandler.text;
+    //            // Analiza el JSON para obtener el valor
+    //            var result = JsonUtility.FromJson<int>(jsonResult);
+    //            Debug.Log("Valor: " + result);
+    //        }
+    //    }
 
-        yield return null;
-    }
+    //    yield return null;
+    //}
 
     private void Simulator_OnNewSession(DateTime time)
     {
