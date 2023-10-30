@@ -32,7 +32,7 @@ $debugMessages = "";
     }
 
     $debugMessages .= "Connection done correctly\n";
-    echo $debugMessages;
+    //echo $debugMessages;
 
     return true;
 }
@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 } else {
     $debugMessages .= "PHP: Método no permitido \n";
-    echo $debugMessages;
+    //echo $debugMessages;
 }
 
 function CreatePlayer() {
@@ -91,11 +91,16 @@ function CreatePlayer() {
 
     if (mysqli_query($conn, $sql)) {
         $debugMessages .= "PHP: Datos insertados con éxito. User ID: " . $conn->insert_id . "\n";
-        echo $debugMessages;
-        echo $conn->insert_id;
+
+        $dataToReturn = array(
+            'debugMessages' => $debugMessages,
+            'userId' => $conn->insert_id,
+        );
+        
+        echo json_encode($dataToReturn);
     } else {
         $debugMessages .= "PHP: Error al insertar datos: " . mysqli_error($conn) + "\n";
-        echo $debugMessages;
+        //echo $debugMessages;
     }
 
     CloseConnection();

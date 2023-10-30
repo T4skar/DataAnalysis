@@ -70,10 +70,14 @@ public class GetData : MonoBehaviour
             {
                 Debug.Log("Form upload complete!");
 
-                if(!Regex.IsMatch(www.downloadHandler.text, @"PHP:")){
-                    temporalID = www.downloadHandler.text;
-                }
-                Debug.Log(temporalID);
+                string response = www.downloadHandler.text;
+
+                MyData data = JsonUtility.FromJson<MyData>(response);
+                Debug.Log(data.userId);
+                // if(!Regex.IsMatch(www.downloadHandler.text, @"PHP:")){
+                //    temporalID = www.downloadHandler.text;
+                //}
+                //Debug.Log(temporalID);
             }
         }
     }
@@ -113,4 +117,11 @@ public class GetData : MonoBehaviour
     {
 
     }
+}
+
+[System.Serializable]
+public class MyData
+{
+    public string debugMessages;
+    public string userId;
 }
