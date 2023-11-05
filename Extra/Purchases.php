@@ -15,16 +15,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
    
    $debugMessages = "";
 
-   UpdateSession();
+   UpdatePurchase();
    
 } else {
-   echo "Sessions PHP: Método no permitido \n";
+   echo "Purchases PHP: Método no permitido \n";
 }
 
-function UpdateSession() {
+function UpdatePurchase() {
 
    // Acceder a los datos enviados desde Unity
-   $purchaseId = $_POST["purchaseId"];
+   $itemId = $_POST["itemId"];
    $userId = $_POST["userId"];
    $timeStamp = $_POST["timeStamp"];
 
@@ -41,7 +41,7 @@ function UpdateSession() {
     if (mysqli_query($conn, $sql)) {
         echo $conn->insert_id;
     } else {
-        echo "Sessions PHP: Error al insertar datos: " . mysqli_error($conn);
+        echo "Purchases PHP: Error al insertar datos: " . mysqli_error($conn);
     }
 
    CloseConnection();
@@ -55,7 +55,7 @@ function ConnectToServer()
    $conn = new mysqli($servername, $username, $password, $dbname);
 
    if ($conn->connect_error) {
-       die("Sessions PHP: Conexión fallida: " . $conn->connect_error);
+       die("Purchases PHP: Conexión fallida: " . $conn->connect_error);
    }
 
    return true;

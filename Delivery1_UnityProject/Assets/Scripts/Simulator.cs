@@ -9,9 +9,9 @@ public class Simulator : MonoBehaviour
 
     public static Action<string,int, string ,string, DateTime> OnNewPlayer; //Name, Country and date
     //(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
-    public static Action<DateTime> OnNewSession;
-    public static Action<DateTime> OnEndSession;
-    public static Action<int, DateTime> OnBuyItem; //Item id and date
+    public static Action<int, DateTime> OnNewSession; //user id, time
+    public static Action<DateTime, int, int> OnEndSession; //time, session id, user id
+    public static Action<int, int, DateTime, int> OnBuyItem; //User id, money spent, time, sessionId
 
     public static Action GetPlayerID;
 
@@ -43,6 +43,7 @@ public class Simulator : MonoBehaviour
         CallbackEvents.OnAddPlayerCallback -= OnPlayerAdded;
         CallbackEvents.OnNewSessionCallback -= OnNewSessionAdded;
         CallbackEvents.OnEndSessionCallback -= OnEndSessionAdded;
+        CallbackEvents.OnItemBuyCallback -= OnItemBought;
     }
 
     #endregion
@@ -86,26 +87,26 @@ public class Simulator : MonoBehaviour
         OnNewPlayer?.Invoke(name, age, gender, country, dateTime);
     }
 
-    void AddNewSession()
+    void AddNewSession(int userId)
     {
         DateTime dateTime = _currentDate;
-        OnNewSession?.Invoke(dateTime);
+        OnNewSession?.Invoke(userId, dateTime);
     }
 
-    void EndSession()
+    void EndSession(int sessionId, int userId)
     {
         _currentDate = _currentDate.Add(GetSessionLength());
         DateTime dateTime = _currentDate;
-        OnEndSession?.Invoke(dateTime);
+        OnEndSession?.Invoke(dateTime, sessionId, userId);
     }
 
-    void TryBuy()
+    void TryBuy(int userId, int sessionId)
     {
         _currentDate = _currentDate.Add(GetSessionLength());
         if (UserBuys())
-            OnBuyItem?.Invoke(GetItem(),_currentDate);
+            OnBuyItem?.Invoke(userId, GetItem(), _currentDate, sessionId);
         else
-            EndSession();
+            EndSession(sessionId, userId);
     }
 
     private bool UserBuys()
@@ -145,7 +146,6 @@ public class Simulator : MonoBehaviour
 
     }
 
-
     private TimeSpan GetSessionLength()
     {
         float lengthInSeconds = Random.Range(30, 500);
@@ -166,22 +166,22 @@ public class Simulator : MonoBehaviour
     #endregion
 
     #region callback subscribers
-    private void OnPlayerAdded(uint obj)
+    private void OnPlayerAdded(int userId)
     {
-
-        AddNewSession();
-    }
-    private void OnNewSessionAdded(uint obj)
-    {
-        TryBuy();
+        AddNewSession(userId);
     }
 
-    private void OnItemBought()
+    private void OnNewSessionAdded(int userId, int sessionId)
     {
-        EndSession();
+        TryBuy(userId, sessionId);
     }
 
-    private void OnEndSessionAdded(uint obj)
+    private void OnItemBought(int sessionId, int userId)
+    {
+        EndSession(sessionId, userId);
+    }
+
+    private void OnEndSessionAdded(int userId)
     {
         
         if(Random.value > ReplayChance)
@@ -195,7 +195,7 @@ public class Simulator : MonoBehaviour
        // Debug.Log(_currentDate.ToLongDateString());
 
         if (_currentDate.Year == 2022)
-            AddNewSession();
+            AddNewSession(userId);
         else
             MakeOnePlayer();
     }
@@ -206,8 +206,8 @@ public class Simulator : MonoBehaviour
 
 public class CallbackEvents
 {
-    public static Action<uint> OnEndSessionCallback;
-    public static Action<uint> OnNewSessionCallback;
-    public static Action<uint> OnAddPlayerCallback;
-    public static Action OnItemBuyCallback;
+    public static Action<int> OnEndSessionCallback;
+    public static Action<int, int> OnNewSessionCallback;
+    public static Action<int> OnAddPlayerCallback;
+    public static Action<int, int> OnItemBuyCallback;
 }

@@ -31,44 +31,50 @@ function UpdateSession() {
 
    global $conn;
 
-   if(ConnectToServer() == false){
+   if(ConnectToServer() == false)
+   {
        return;
    }
 
-   // Comprobar si es una session nueva o no
-   if($start == "True"){
+    // Comprobar si es una session nueva o no
+    if($start == "True")
+    {
 
-    $sql = "INSERT INTO Sessions ( Start_Timestamp, User_id) VALUES ('$timeStamp','$userId')";
+        $sql = "INSERT INTO Sessions ( Start_Timestamp, User_id) VALUES ('$timeStamp','$userId')";
 
-    if (mysqli_query($conn, $sql)) {
-        echo $conn->insert_id;
+            if (mysqli_query($conn, $sql)) {
+                echo $conn->insert_id;
 
-        // Checkear la tabla
-        $result = $conn->query($sql);
-    } else {
-        echo "Sessions PHP: Error al insertar datos: " . mysqli_error($conn);
+                // Checkear la tabla
+                $result = $conn->query($sql);
+            } 
+            else 
+            {
+                echo "Sessions PHP: Error al insertar datos: " . mysqli_error($conn);
+            }
+    }
+    else
+    {
+
+        if($sessionId != -1)
+        {
+            // Si no es una session nueva busca en la tabla la session q tiene la misma id
+
+            $sql = "UPDATE Sessions SET End_Timestamp = '$timeStamp' WHERE Session_Id = $sessionId";
+
+            if ($conn->query($sql) === TRUE) 
+            {
+                echo $sessionId;
+            } 
+            else 
+            {
+                echo "Error al actualizar el registro: " . $conn->error;
+            }
+        
+        }
     }
 
-   }
-   else{
-
-    // Si no es una session nueva busca en la tabla la session q tiene la misma id
-
-    $StartDate = "SELECT Date FROM Sessions WHERE Session_Id = $sessionId";
-    $result = $conn->query($StartDate);
     
-    while ($row = mysqli_fetch_array($result)) $startDate = $row[0];
-
-    // Calcula la diferencia de tiempo entre la session cuando fué creada y ahora
-
-    $getDuration = "SELECT TIMESTAMPDIFF(SECOND, $startDate, $timeStamp)";
-    $result = $conn->query($getDuration);
-
-    $duration = mysqli_fetch_array($result)[0];
-    $sql = "UPDATE Sessions SET Duration = $duration";
-
-    $result = $conn->query($sql);
-   }
 
    CloseConnection();
 }
