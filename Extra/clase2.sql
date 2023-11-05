@@ -73,12 +73,34 @@
 #select country, count(distinct session_id)
 #from kpi.sess
 
-#D1
+#D1/D7
 #select count(u.user_id)/count(DATE("u.start" - interval 1 day) = u.dateCreated)
-select count(distinct s.player_id)/ count(distinct u.user_id)
+/*select count(distinct s.player_id)/ count(distinct u.user_id)
 from kpi.users u 
 left join kpi.sessions s
 on u.user_id = s.player_id  and DATE(s.start - interval 7 day) = u.dateCreated
+*/
 
+#create view sessionusers as "A"
 
+#DAU
+/*
+CREATE VIEW DAU AS 
+select date(s.start) , count(distinct u.user_id)
+from kpi.users u 
+ join kpi.sessions s
+on u.user_id = s.player_id 
+group by date(s.start )
+*/
+#MAU
+/*
+#CREATE VIEW MAUmau AS 
+select year(s.start), month(s.start) , count(distinct u.user_id)
+from kpi.users u 
+ join kpi.sessions s
+on u.user_id = s.player_id 
+group by year(s.start), month(s.start)
+*/
 
+#stickiness
+#select * from kpi.mau
