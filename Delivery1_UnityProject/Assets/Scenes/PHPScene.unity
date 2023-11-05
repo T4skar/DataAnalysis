@@ -199,6 +199,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b190bcbc409e184688a53b10b50e114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sessionsUrl: https://citmalumnes.upc.es/~xaviercb12/Sessions.php
+  usersUrl: https://citmalumnes.upc.es/~xaviercb12/Users.php
+  purchasesUrl: https://citmalumnes.upc.es/~xaviercb12/Purchases.php
+  temporalID: 0
 --- !u!4 &638282947
 Transform:
   m_ObjectHideFlags: 0

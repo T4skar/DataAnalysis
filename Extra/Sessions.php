@@ -1,71 +1,96 @@
 <?php
 
-// He simplificado todo a lo basico, suda de los JSON cuando se puede hacer un echo de la variable. 
-// NO USAR ECHO para debug, solo para errores
+// Lo que habia antes en Sessions ahora está en Users ya que era todo el rollo de crear un user
 
- $servername = "localhost";
- $username = "xaviercb12";
- $password = "8QGQefMvS38H";
- $dbname = "xaviercb12";
+$servername = "localhost";
+$username = "xaviercb12";
+$password = "8QGQefMvS38H";
+$dbname = "xaviercb12";
 
- $conn;
+$conn;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    global $debugMessages;
-    
-    $debugMessages = "";
+   global $debugMessages;
+   
+   $debugMessages = "";
 
-    CreatePlayer();
-    
+   UpdateSession();
+   
 } else {
-    echo "PHP: Método no permitido \n";
+   echo "Sessions PHP: Método no permitido \n";
 }
 
-function CreatePlayer() {
+function UpdateSession() {
 
-    // Acceder a los datos enviados desde Unity
-    $playerName = $_POST["playerName"];
-    $playerAge = $_POST["playerAge"];
-    $playerGender = $_POST["playerGender"];
-    $playerCountry = $_POST["playerCountry"];
-    $signUpTime = $_POST["signUpTime"];
+   // Acceder a los datos enviados desde Unity
+   $sessionId = $_POST["sessionId"];
+   $start = $_POST["start"];
+   $userId = $_POST["userId"];
+   $timeStamp = $_POST["timeStamp"];
 
-    global $conn;
+   global $conn;
 
-    if(ConnectToServer() == false){
-        return;
-    }
+   if(ConnectToServer() == false){
+       return;
+   }
 
-    $sql = "INSERT INTO Users ( User_Name, User_Age, User_Gender, User_Country, Sign_Up_Time) VALUES ('$playerName',$playerAge,'$playerGender','$playerCountry','$signUpTime')";
+   // Comprobar si es una session nueva o no
+   if($start == "True"){
+
+    $sql = "INSERT INTO Sessions ( Start_Timestamp, User_id) VALUES ('$timeStamp','$userId')";
 
     if (mysqli_query($conn, $sql)) {
         echo $conn->insert_id;
+
+        // Checkear la tabla
+        $result = $conn->query($sql);
     } else {
-        echo "PHP: Error al insertar datos: " . mysqli_error($conn);
+        echo "Sessions PHP: Error al insertar datos: " . mysqli_error($conn);
     }
 
-    CloseConnection();
+   }
+   else{
+
+    // Si no es una session nueva busca en la tabla la session q tiene la misma id
+
+    $StartDate = "SELECT Date FROM Sessions WHERE Session_Id = $sessionId";
+    $result = $conn->query($StartDate);
+    
+    while ($row = mysqli_fetch_array($result)) $startDate = $row[0];
+
+    // Calcula la diferencia de tiempo entre la session cuando fué creada y ahora
+
+    $getDuration = "SELECT TIMESTAMPDIFF(SECOND, $startDate, $timeStamp)";
+    $result = $conn->query($getDuration);
+
+    $duration = mysqli_fetch_array($result)[0];
+    $sql = "UPDATE Sessions SET Duration = $duration";
+
+    $result = $conn->query($sql);
+   }
+
+   CloseConnection();
 }
 
 function ConnectToServer() 
 {
-    global $servername, $username, $password, $dbname;
-    global $conn;
-    
-    $conn = new mysqli($servername, $username, $password, $dbname);
+   global $servername, $username, $password, $dbname;
+   global $conn;
+   
+   $conn = new mysqli($servername, $username, $password, $dbname);
 
-    if ($conn->connect_error) {
-        die("Conexión fallida: " . $conn->connect_error);
-    }
+   if ($conn->connect_error) {
+       die("Sessions PHP: Conexión fallida: " . $conn->connect_error);
+   }
 
-    return true;
+   return true;
 }
 
 function CloseConnection() 
 {
-    global $conn;
-    $conn->close();
+   global $conn;
+   $conn->close();
 }
 
 ?>
