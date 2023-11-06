@@ -8,7 +8,6 @@ public class Simulator : MonoBehaviour
 {
 
     public static Action<string,int, string ,string, DateTime> OnNewPlayer; //Name, Country and date
-    //(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
     public static Action<int, DateTime> OnNewSession; //user id, time
     public static Action<DateTime, int, int> OnEndSession; //time, session id, user id
     public static Action<int, int, DateTime, int> OnBuyItem; //User id, money spent, time, sessionId
