@@ -62,11 +62,12 @@
 #on u.user_id = t.player_id	
 
 #ej2  LEFT-->ARPU;
-#select sum(t.totalPrice) , count(distinct t.player_id), sum(t.totalPrice)/count(distinct t.player_id) as "ARPU"
-#from kpi.users u
-#left join kpi.transactions t
-#on u.user_id = t.player_id	;
-
+/*
+select sum(t.totalPrice) , count(distinct t.player_id), sum(t.totalPrice)/count(distinct t.player_id) as "ARPU"
+from test.users u
+left join test.transactions t
+on u.user_id = t.player_id	;
+*/
 #create view sessionusers as
 #select * from kpi.sessions join kpi.users on user_id = player_id
 
@@ -75,9 +76,10 @@
 
 #D1/D7
 #select count(u.user_id)/count(DATE("u.start" - interval 1 day) = u.dateCreated)
-/*select count(distinct s.player_id)/ count(distinct u.user_id)
-from kpi.users u 
-left join kpi.sessions s
+/*
+select count(distinct s.player_id)/ count(distinct u.user_id)
+from test.users u 
+left join test.sessions s
 on u.user_id = s.player_id  and DATE(s.start - interval 7 day) = u.dateCreated
 */
 
@@ -95,7 +97,7 @@ group by date(s.start )
 #group by date(d.date )
 */
 #DAU BUENO CREO
-/* 
+/*
 #select date(s.start) , count(distinct u.user_id)
 select d.date , count(distinct s.player_id)
 from  test.dates d
@@ -103,7 +105,17 @@ left join test.sessions s #join test.users u
 #on u.user_id = s.player_id #and d.date= date(s.start)
 on  d.date= date(s.start) 
 #group by date(s.start )
-group by date(d.date )
+group by d.date 
+*/
+/*
+CREATE VIEW DAU AS 
+select d.date , count(distinct s.player_id) as "DAU"
+from  test.dates d
+left join test.SessionUsers s 
+#on u.user_id = s.player_id #and d.date= date(s.start)
+on d.date= date(s.start)
+#group by date(s.start )
+group by d.date 
 */
 #MAU
 
@@ -116,15 +128,30 @@ from test.users u
 on u.user_id = s.player_id 
 group by year(s.start), month(s.start)
 */
+/*
 select d.date , count(distinct s.player_id) as mau
 from test.dates d
 left join test.sessions s
-on s.start between d.date and d.date
+on s.start between d.date and DATE(d.date - interval 1 month)
 #on  DATE(s.start - interval 1 month) = d.date #d.date= date(s.start) and
 #on  DATE( d.date- interval 1 month) = s.start #d.date= date(s.start) and
 #on  DATE(s.start - interval 1 month) = d.date #d.date= date(s.start) and
 group by date(d.date )
-
-
+*/
+#mau bueno
+/*
+CREATE VIEW MAU AS 
+select d.date , count(distinct s.player_id) as MAU
+from test.dates d
+left join test.sessions s
+on datediff(s.start, d.date)<=1 and  datediff(s.start, d.date)>-30
+group by d.date
+*/
 #stickiness
-#select * from kpi.mau
+/*
+select d.date, DAU/MAU AS "STICKINESS"
+from test.DAU d
+left join  test.MAU m
+on d.date = m.date
+GROUP BY d.date
+*/
