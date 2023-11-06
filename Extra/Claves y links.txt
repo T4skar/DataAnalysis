@@ -11,3 +11,13 @@ xavierlm9        zMpmB6Drtvc2
 xaviercb12	8QGQefMvS38H
 
 INSERT INTO `Users`( `User_Name`, `User_Age`, `User_Gender`, `User_Country`, `Sign_Up_Time`) VALUES ("lolo",23,"F","Spain",'1998-01-23 12:45:56')
+
+TRUNCATE Purchases;
+TRUNCATE Sessions;
+TRUNCATE Users;
+
+INSERT INTO Items ( Price) VALUES ('0.99');
+INSERT INTO Items ( Price) VALUES ('1.99');
+INSERT INTO Items ( Price) VALUES ('9.99');
+INSERT INTO Items ( Price) VALUES ('49.99');
+INSERT INTO Items ( Price) VALUES ('99.99');

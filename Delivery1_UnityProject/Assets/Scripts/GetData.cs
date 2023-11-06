@@ -164,7 +164,7 @@ public class GetData : MonoBehaviour
             Debug.Log("Form upload to " + url + " complete!");
             if (www.downloadHandler.text != null)
             {
-                Debug.Log(www.downloadHandler.text);
+                Debug.Log("Item ID: " + www.downloadHandler.text);
             }
         }
 

@@ -34,13 +34,28 @@ function UpdatePurchase() {
        return;
    }
 
-   // Habria q hacer algo con Items.xlsx para mirar los precios y tal
+   // Recibes itemId de unity
+   // itemid mirar el precio en la tabla de Items
+   // ese precio enviarselo a purchases sumandoselo al spend money
 
-   $sql = ""; //= "INSERT INTO Sessions ( Start_Timestamp, User_id) VALUES ('$timeStamp','$userId')";
+   $sql = "SELECT Price FROM Items WHERE Item_Id = $itemId";
+   $result = $conn->query($sql);
+   if ($result->num_rows > 0) {
+      // Si se encontró un resultado, obten el valor de precio
+      $row = $result->fetch_assoc();
+      $price = $row["Price"];
+      echo $price;
+   } else {
+      echo "No se encontraron resultados para la ID $itemId.";
+   }
 
-    if (mysqli_query($conn, $sql)) {
+
+   $sql = "INSERT INTO Purchases ( User_Id, Spent_Money, Timestamp) VALUES ('$userId', '$price' ,'$timeStamp')";
+
+      if ($conn->query($sql) === TRUE) 
+      {
         echo $conn->insert_id;
-    } else {
+      } else {
         echo "Purchases PHP: Error al insertar datos: " . mysqli_error($conn);
     }
 
