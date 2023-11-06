@@ -36,7 +36,6 @@ public class GetData : MonoBehaviour
     private void Simulator_OnNewPlayer(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
     {
         StartCoroutine(SendPlayerData(playerName, playerAge, playerGender, playerCountry, signUpTime, usersUrl));
-        
     }
 
     private void Simulator_OnNewSession(int userId, DateTime startTime)
@@ -47,13 +46,11 @@ public class GetData : MonoBehaviour
     private void Simulator_OnEndSession(DateTime endTime, int sessionId, int userId)
     {
         StartCoroutine(SendSessionData(userId, endTime, false, sessionsUrl, sessionId));
-        //CallbackEvents.OnEndSessionCallback.Invoke(0);
     }
 
     private void Simulator_OnItemBuy(int userId, int moneySpent, DateTime time, int sessionId)
     {
         StartCoroutine(SendPurchaseData(time, userId, moneySpent, purchasesUrl, sessionId));
-       // 
     }
 
     // === La chicha (IEnumerators) ===
