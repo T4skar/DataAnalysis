@@ -39,7 +39,9 @@ function CreatePlayer() {
 
    $sql = "INSERT INTO Users ( User_Name, User_Age, User_Gender, User_Country, Sign_Up_Time) VALUES ('$playerName',$playerAge,'$playerGender','$playerCountry','$signUpTime')";
 
-   if (mysqli_query($conn, $sql)) {
+   //if (mysqli_query($conn, $sql)) {
+   if ($conn->query($sql) === TRUE) 
+   {
        echo $conn->insert_id;
    } else {
        echo "Users PHP: Error al insertar datos: " . mysqli_error($conn);

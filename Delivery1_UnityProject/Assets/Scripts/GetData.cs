@@ -42,7 +42,6 @@ public class GetData : MonoBehaviour
     private void Simulator_OnNewSession(int userId, DateTime startTime)
     {
         StartCoroutine(SendSessionData(userId, startTime, true, sessionsUrl));
-        
     }
 
     private void Simulator_OnEndSession(DateTime endTime, int sessionId, int userId)
@@ -97,20 +96,8 @@ public class GetData : MonoBehaviour
 
     private IEnumerator SendSessionData(int userId, DateTime date, bool startSession, string url, int sessionId = -1)
     {
-        //int id;
-
-        //if (startSession)
-        //{
-        //    //id = temporalSessionID++;
-        //}
-        //else
-        //{
-        //   // id = temporalSessionID;
-        //}
-
         WWWForm form = new WWWForm();
 
-        //form.AddField("sessionId", id);
         form.AddField("sessionId", sessionId);
         form.AddField("start", startSession.ToString());
         form.AddField("userId", userId);

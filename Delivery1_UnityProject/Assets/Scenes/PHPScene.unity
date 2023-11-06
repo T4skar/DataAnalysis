@@ -202,7 +202,6 @@ MonoBehaviour:
   sessionsUrl: https://citmalumnes.upc.es/~xaviercb12/Sessions.php
   usersUrl: https://citmalumnes.upc.es/~xaviercb12/Users.php
   purchasesUrl: https://citmalumnes.upc.es/~xaviercb12/Purchases.php
-  temporalID: 0
 --- !u!4 &638282947
 Transform:
   m_ObjectHideFlags: 0
@@ -433,7 +432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c1f8d4aa417fbe479d3dfe26788d9fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  namesSourceClass: Lexic.FantasyFemaleNames2
+  namesSourceClass: Lexic.FantasyMaleNames2
 --- !u!4 &1280703614
 Transform:
   m_ObjectHideFlags: 0

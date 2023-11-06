@@ -39,14 +39,10 @@ function UpdateSession() {
     // Comprobar si es una session nueva o no
     if($start == "True")
     {
-
         $sql = "INSERT INTO Sessions ( Start_Timestamp, User_id) VALUES ('$timeStamp','$userId')";
 
-            if (mysqli_query($conn, $sql)) {
+            if ($conn->query($sql) === TRUE) {
                 echo $conn->insert_id;
-
-                // Checkear la tabla
-                $result = $conn->query($sql);
             } 
             else 
             {
