@@ -1,7 +1,5 @@
 <?php
 
-// Lo que habia antes en Sessions ahora está en Users ya que era todo el rollo de crear un user
-
 $servername = "localhost";
 $username = "xaviercb12";
 $password = "8QGQefMvS38H";
@@ -10,11 +8,6 @@ $dbname = "xaviercb12";
 $conn;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-   global $debugMessages;
-   
-   $debugMessages = "";
-
    UpdatePurchase();
    
 } else {

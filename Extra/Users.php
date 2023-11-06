@@ -1,8 +1,5 @@
 <?php
 
-// He simplificado todo a lo basico, suda de los JSON cuando se puede hacer un echo de la variable. 
-// NO USAR ECHO para debug, solo para errores
-
 $servername = "localhost";
 $username = "xaviercb12";
 $password = "8QGQefMvS38H";
@@ -11,11 +8,6 @@ $dbname = "xaviercb12";
 $conn;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-   global $debugMessages;
-   
-   $debugMessages = "";
-
    CreatePlayer();
    
 } else {
