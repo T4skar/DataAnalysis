@@ -24,6 +24,7 @@ public class Simulator : MonoBehaviour
     private int _nPlayers;
 
     private List<string> Countries;
+    [SerializeField] int nCountries;
 
     [SerializeField]
     private Lexic.NameGenerator namegen;
@@ -50,7 +51,7 @@ public class Simulator : MonoBehaviour
     void Start()
     {
         Countries = new List<string>();
-        int nCountries = Random.Range(1, 10);
+        //int nCountries = Random.Range(1, 10);
 
         string[] coutryNames = System.Enum.GetNames(typeof(AllCountries));
         for (int i = 0; i < nCountries; i++)
