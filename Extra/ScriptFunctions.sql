@@ -1,29 +1,41 @@
 
-### SESSIONS
-	# nº Sessions
+### SESSIONS X
+	# nº Sessions X
     /*
-select count(s.session_id) AS "Nº of Sessions"
+select  u.User_Country,count(s.session_id) AS "Nº of Sessions"
 from xaviercb12.Users u
 left join xaviercb12.Sessions s
 on u.User_Id = s.User_Id	
+group by u.User_Country
 */
-	# Avg lenght of Sesssion
+	# Avg lenght of Sesssion X
+/*
 select  u.User_Country, avg(timestampdiff(minute,s.Start_Timestamp, s.End_Timestamp)) AS "AVG time of Session per Country"
 from xaviercb12.Users u
 right join xaviercb12.Sessions s
 on u.User_Id = s.User_Id	
 group by u.User_Country
-
+*/
 
 ### MONETISATION
 
-	#ARPU
-    
-    #ARRPU
-
+	#ARPU X
+    /*
+select sum(t.Spent_Money) , count(distinct t.User_Id), sum(t.Spent_Money)/count(distinct t.User_Id) as "ARPU"
+from xaviercb12.Users u
+left join xaviercb12.Purchases t
+on u.User_Id = t.User_Id	
+*/
+    #ARRPU X
+  /*  
+select sum(t.Spent_Money) , count(distinct t.User_Id), sum(t.Spent_Money)/count(distinct t.User_Id) as "ARPPU"
+from xaviercb12.Users u
+right join xaviercb12.Purchases t
+on u.User_Id = t.User_Id	
+*/
 ### NUMBER OF USERS
 	
-    #DAU
+    #DAU X 
     /*
 CREATE VIEW DAU AS 
 select d.date , count(distinct s.User_Id) as  "DAU"
@@ -32,7 +44,7 @@ left join xaviercb12.Sessions s
 on  d.date= date(s.Start_Timestamp) 
 group by d.date ;
 */
-    #MAU
+    #MAU X
     /*
 CREATE VIEW MAU AS 
 select d.date , count(distinct s.User_Id) as MAU
@@ -43,7 +55,7 @@ group by d.date;
 */
 ### RETENTION
 	
-    #Stickiness
+    #Stickiness X
     /*
 select d.date, DAU/MAU *100 AS "STICKINESS"
 from xaviercb12.DAU d
