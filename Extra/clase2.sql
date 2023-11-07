@@ -76,12 +76,12 @@ on u.user_id = t.player_id	;
 
 #D1/D7
 #select count(u.user_id)/count(DATE("u.start" - interval 1 day) = u.dateCreated)
-/*
+
 select count(distinct s.player_id)/ count(distinct u.user_id)
 from test.users u 
 left join test.sessions s
-on u.user_id = s.player_id  and DATE(s.start - interval 7 day) = u.dateCreated
-*/
+on u.user_id = s.player_id  and DATE(s.start - interval 2 day) = u.dateCreated
+
 
 #create view sessionusers as "A"
 
