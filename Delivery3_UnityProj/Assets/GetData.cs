@@ -1,32 +1,44 @@
+using Gamekit3D;
+using Gamekit3D.Message;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class GetData : MonoBehaviour
+public class GetData : MonoBehaviour, IMessageReceiver
 {
     // === Variables ===
 
-    [SerializeField] string sessionsUrl = "https://citmalumnes.upc.es/~xaviercb12/Sessions.php";
-    [SerializeField] string usersUrl = "https://citmalumnes.upc.es/~xaviercb12/Users.php";
-    [SerializeField] string purchasesUrl = "https://citmalumnes.upc.es/~xaviercb12/Purchases.php";
+    [SerializeField] string sessionsUrl = "https://citmalumnes.upc.es/~xavierlm9/Sessions.php";
+    [SerializeField] string playerGetsDmgURL = "https://citmalumnes.upc.es/~xavierlm9/PlayerGetsDmg.php";
+    [SerializeField] string enemyGetsDmgURL = "https://citmalumnes.upc.es/~xavierlm9/EnemyGetsDmg.php";
+    [SerializeField] string playerTrackURL = "https://citmalumnes.upc.es/~xavierlm9/PlayerTrack.php";
 
     //[SerializeField] int temporalUserID = -1;
     //[SerializeField] int temporalSessionID = -1;
 
+    [SerializeField]
+    Damageable Ellen;
+
     void OnEnable()
     {
+        Ellen.onDamageMessageReceivers.Add(this);
     }
 
     void OnDisable()
     {
     }
 
+    private void Start()
+    {
+        
+    }
+
     // === Coroutines ===
 
     private void Simulator_OnNewPlayer(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
     {
-        StartCoroutine(SendPlayerData(playerName, playerAge, playerGender, playerCountry, signUpTime, usersUrl));
+        //StartCoroutine(SendPlayerData(playerName, playerAge, playerGender, playerCountry, signUpTime, usersUrl));
     }
 
     private void Simulator_OnNewSession(int userId, DateTime startTime)
@@ -41,7 +53,7 @@ public class GetData : MonoBehaviour
 
     private void Simulator_OnItemBuy(int userId, int moneySpent, DateTime time, int sessionId)
     {
-        StartCoroutine(SendPurchaseData(time, userId, moneySpent, purchasesUrl, sessionId));
+        //StartCoroutine(SendPurchaseData(time, userId, moneySpent, purchasesUrl, sessionId));
     }
 
     // === La chicha (IEnumerators) ===
@@ -157,5 +169,25 @@ public class GetData : MonoBehaviour
         }
 
         //CallbackEvents.OnItemBuyCallback.Invoke(sessionId, userId);
+    }
+
+    public void OnReceiveMessage(MessageType type, object sender, object msg)
+    {
+        Debug.Log("Message recieved");
+
+        switch (type)
+        {
+            case MessageType.DAMAGED:
+
+                break;
+
+            case MessageType.DEAD:
+
+                break;
+
+            case MessageType.RESPAWN:
+
+                break;
+        }
     }
 }
