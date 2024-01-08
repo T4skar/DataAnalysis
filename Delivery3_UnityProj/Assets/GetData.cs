@@ -156,16 +156,41 @@ public class GetData : MonoBehaviour, IMessageReceiver
         switch (type)
         {
             case MessageType.DAMAGED:
-
+                Send_PlayerGetsDamage();
                 break;
 
             case MessageType.DEAD:
-
+                Send_PlayerDeath();
                 break;
 
             case MessageType.RESPAWN:
 
                 break;
         }
+    }
+
+    public void Send_PlayerGetsDamage()
+    {
+
+    }
+
+    public void Send_EnemyGetsDamage()
+    {
+
+    }
+
+    public void Send_PlayerDeath()
+    {
+
+    }
+
+    public void Send_Sessions()
+    {
+
+    }
+
+    public void Send_PlayerTrack()
+    {
+
     }
 }
