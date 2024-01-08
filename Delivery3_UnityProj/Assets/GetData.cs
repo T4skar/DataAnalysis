@@ -34,28 +34,6 @@ public class GetData : MonoBehaviour, IMessageReceiver
         
     }
 
-    // === Coroutines ===
-
-    private void Simulator_OnNewPlayer(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime)
-    {
-        //StartCoroutine(SendPlayerData(playerName, playerAge, playerGender, playerCountry, signUpTime, usersUrl));
-    }
-
-    private void Simulator_OnNewSession(int userId, DateTime startTime)
-    {
-        StartCoroutine(SendSessionData(userId, startTime, true, sessionsUrl));
-    }
-
-    private void Simulator_OnEndSession(DateTime endTime, int sessionId, int userId)
-    {
-        StartCoroutine(SendSessionData(userId, endTime, false, sessionsUrl, sessionId));
-    }
-
-    private void Simulator_OnItemBuy(int userId, int moneySpent, DateTime time, int sessionId)
-    {
-        //StartCoroutine(SendPurchaseData(time, userId, moneySpent, purchasesUrl, sessionId));
-    }
-
     // === La chicha (IEnumerators) ===
 
     private IEnumerator SendPlayerData(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime, string url)
