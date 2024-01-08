@@ -2,6 +2,7 @@ using Gamekit3D;
 using Gamekit3D.Message;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -20,9 +21,25 @@ public class GetData : MonoBehaviour, IMessageReceiver
     [SerializeField]
     Damageable Ellen;
 
+    [SerializeField]
+    List<Damageable> meleeEnemies = new();
+
+    [SerializeField]
+    List<Damageable> rangeEnemies = new();
+
     void OnEnable()
     {
         Ellen.onDamageMessageReceivers.Add(this);
+
+        foreach (Damageable damageable in meleeEnemies)
+        {
+            damageable.onDamageMessageReceivers.Add(this);
+        }
+
+        foreach (Damageable damageable in rangeEnemies)
+        {
+            damageable.onDamageMessageReceivers.Add(this);
+        }
     }
 
     void OnDisable()
