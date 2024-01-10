@@ -13,10 +13,8 @@ public class GetData : MonoBehaviour, IMessageReceiver
     [SerializeField] string sessionsUrl = "https://citmalumnes.upc.es/~xavierlm9/Sessions.php";
     [SerializeField] string playerGetsDmgURL = "https://citmalumnes.upc.es/~xavierlm9/PlayerGetsDmg.php";
     [SerializeField] string enemyGetsDmgURL = "https://citmalumnes.upc.es/~xavierlm9/EnemyGetsDmg.php";
+    [SerializeField] string playerDeathURL = "https://citmalumnes.upc.es/~xavierlm9/PlayerDeath.php";
     [SerializeField] string playerTrackURL = "https://citmalumnes.upc.es/~xavierlm9/PlayerTrack.php";
-
-    //[SerializeField] int temporalUserID = -1;
-    //[SerializeField] int temporalSessionID = -1;
 
     [SerializeField]
     Damageable Ellen;
@@ -40,11 +38,10 @@ public class GetData : MonoBehaviour, IMessageReceiver
 
     private void Start()
     {
-        
+
     }
 
     // === La chicha (IEnumerators) ===
-
     private IEnumerator SendPlayerData(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime, string url)
     {
         WWWForm form = new WWWForm();
@@ -165,11 +162,11 @@ public class GetData : MonoBehaviour, IMessageReceiver
         switch (type)
         {
             case MessageType.DAMAGED:
-                Send_PlayerGetsDamage();
+                StartCoroutine(Send_PlayerGetsDamage(sender, (Damageable.DamageMessage)msg));
                 break;
 
             case MessageType.DEAD:
-                Send_PlayerDeath();
+                StartCoroutine(Send_PlayerDeath(sender, (Damageable.DamageMessage)msg));
                 break;
 
             case MessageType.RESPAWN:
@@ -178,19 +175,64 @@ public class GetData : MonoBehaviour, IMessageReceiver
         }
     }
 
-    public void Send_PlayerGetsDamage()
+    public IEnumerator Send_PlayerGetsDamage(object sender, Damageable.DamageMessage msg)
     {
+        WWWForm form = new WWWForm();
+
+        form.AddField("methodToCall", "Apply Dmg");
+
+        form.AddField("posX", (int)Ellen.transform.position.x);
+        form.AddField("posY", (int)Ellen.transform.position.y);
+        form.AddField("posZ", (int)Ellen.transform.position.z);
+        form.AddField("timeStamp", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("isThrowing", msg.throwing.ToString());
+
+        UnityWebRequest www = UnityWebRequest.Post(playerGetsDmgURL, form);
+
+        yield return www.SendWebRequest();
+
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Error: " + www.error);
+        }
+        else
+        {
+            Debug.Log(www.downloadHandler.text);
+        }
 
     }
 
-    public void Send_EnemyGetsDamage()
+    public IEnumerator Send_EnemyGetsDamage(object sender, Damageable.DamageMessage msg)
     {
+        WWWForm form = new();
 
+        form.AddField("methodToCall", "Apply Dmg");
+
+        form.AddField("posX", msg.damager.transform.position.x.ToString());
+        form.AddField("posY", msg.damager.transform.position.y.ToString());
+        form.AddField("posZ", msg.damager.transform.position.z.ToString());
+        form.AddField("timeStamp", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"));
+
+        UnityWebRequest www = UnityWebRequest.Post(enemyGetsDmgURL, form);
+
+        yield return www.SendWebRequest();
     }
 
-    public void Send_PlayerDeath()
+    public IEnumerator Send_PlayerDeath(object sender, Damageable.DamageMessage msg)
     {
+        WWWForm form = new();
 
+        form.AddField("methodToCall", "Player Death");
+
+        form.AddField("posX", Ellen.transform.position.x.ToString());
+        form.AddField("posY", Ellen.transform.position.y.ToString());
+        form.AddField("posZ", Ellen.transform.position.z.ToString());
+        form.AddField("timeStamp", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("isThrowing", msg.throwing.ToString());
+
+        UnityWebRequest www = UnityWebRequest.Post(playerDeathURL, form);
+
+        yield return www.SendWebRequest();
     }
 
     public void Send_Sessions()

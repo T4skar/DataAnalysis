@@ -1,25 +1,26 @@
 <?php
 
 $servername = "localhost";
-$username = "xaviercb12";
-$password = "8QGQefMvS38H";
-$dbname = "xaviercb12";
+$username = "xavierlm9";
+$password = "zMpmB6Drtvc2";
+$dbname = "xavierlm9";
 
 $conn;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   UpdateSession();
+   UpdateData();
 } else {
    echo "Sessions PHP: Método no permitido \n";
 }
 
-function UpdateSession() {
+function UpdateData() {
 
    // Acceder a los datos enviados desde Unity
-   $sessionId = $_POST["sessionId"];
-   $start = $_POST["start"];
-   $userId = $_POST["userId"];
    $timeStamp = $_POST["timeStamp"];
+   $posX = $_POST["posX"];
+   $posY = $_POST["posY"];
+   $posZ = $_POST["posZ"];
+   $isThrowing = $_POST["isThrowing"];
 
    global $conn;
 
@@ -28,41 +29,14 @@ function UpdateSession() {
        return;
    }
 
-    // Comprobar si es una session nueva o no
-    if($start == "True")
+    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$isThrowing')";    
+
+    if ($conn->query($sql) === TRUE) 
     {
-        $sql = "INSERT INTO Sessions ( Start_Timestamp, User_id) VALUES ('$timeStamp','$userId')";
-
-            if ($conn->query($sql) === TRUE) {
-                echo $conn->insert_id;
-            } 
-            else 
-            {
-                echo "Sessions PHP: Error al insertar datos: " . mysqli_error($conn);
-            }
+        echo "Fino señores";
+    } else {
+        echo "Users PHP: Error al insertar datos: " . mysqli_error($conn);
     }
-    else
-    {
-
-        if($sessionId != -1)
-        {
-            // Si no es una session nueva busca en la tabla la session q tiene la misma id
-
-            $sql = "UPDATE Sessions SET End_Timestamp = '$timeStamp' WHERE Session_Id = $sessionId";
-
-            if ($conn->query($sql) === TRUE) 
-            {
-                echo $sessionId;
-            } 
-            else 
-            {
-                echo "Error al actualizar el registro: " . $conn->error;
-            }
-        
-        }
-    }
-
-    
 
    CloseConnection();
 }
