@@ -22,21 +22,13 @@ public class GetData : MonoBehaviour, IMessageReceiver
     Damageable Ellen;
 
     [SerializeField]
-    List<Damageable> meleeEnemies = new();
-
-    [SerializeField]
-    List<Damageable> rangeEnemies = new();
+    List<Damageable> enemies = new();
 
     void OnEnable()
     {
         Ellen.onDamageMessageReceivers.Add(this);
 
-        foreach (Damageable damageable in meleeEnemies)
-        {
-            damageable.onDamageMessageReceivers.Add(this);
-        }
-
-        foreach (Damageable damageable in rangeEnemies)
+        foreach (Damageable damageable in enemies)
         {
             damageable.onDamageMessageReceivers.Add(this);
         }
