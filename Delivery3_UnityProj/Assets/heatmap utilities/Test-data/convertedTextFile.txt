@@ -1,0 +1,20 @@
+[
+  {
+    "positionEvents": [
+      {
+        "PositionData": {
+          "x": -1.0791869481385774e-10,
+          "y": 0.08999985456466675,
+          "z": 1.2231721711886134e-12
+        },
+        "EventName": "Object Position"
+      },
+      {
+        "PositionData": {
+          "x": 0.023285338655114175,
+          "y": 0.0899999737739563,
+          "z": 0.02537505514919758
+        },
+        "EventName": "Object Position"
+      }
+    ]

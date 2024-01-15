@@ -15,7 +15,7 @@ public class HeatMapGenerator : MonoBehaviour
         try
         {
 
-        SerializeJson();
+            SerializeJson();
             Debug.Log("Ha FUNCIONADO el escribir en JASON");
         }
         catch 

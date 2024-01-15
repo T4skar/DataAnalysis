@@ -179,7 +179,7 @@ public class GetData : MonoBehaviour, IMessageReceiver
     {
         WWWForm form = new WWWForm();
 
-        form.AddField("methodToCall", "Apply Dmg");
+        form.AddField("methodToCall", "Set Info");
 
         form.AddField("posX", (int)Ellen.transform.position.x);
         form.AddField("posY", (int)Ellen.transform.position.y);
