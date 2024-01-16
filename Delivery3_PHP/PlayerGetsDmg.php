@@ -40,11 +40,11 @@ function UpdateData() {
    $posX = $_POST["posX"];
    $posY = $_POST["posY"];
    $posZ = $_POST["posZ"];
-   $isThrowing = $_POST["isThrowing"];
+   $damageCause = $_POST["damageCause"];
 
     global $conn;
 
-    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$isThrowing')";    
+    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$damageCause')";    
 
     if ($conn->query($sql) === TRUE) 
     {
@@ -54,22 +54,11 @@ function UpdateData() {
     {
         echo "PHP: Error al insertar datos: " . mysqli_error($conn);
     }
-
-  
 }
 
 function GetInfo() {
 
-   // Acceder a los datos enviados desde Unity
-   //$timeStamp = $_POST["timeStamp"];
-   //$posX = $_POST["posX"];
-   //$posY = $_POST["posY"];
-   //$posZ = $_POST["posZ"];
-   //$isThrowing = $_POST["isThrowing"];
-
     global $conn;
-
-    //$sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$isThrowing')";    
 
     $sql = "SELECT * FROM PlayerGetsDamage";
     $result = $conn->query($sql);
@@ -97,8 +86,6 @@ function GetInfo() {
     {
         //echo "PHP: Error al insertar datos: " . mysqli_error($conn);
     }
-
-  
 }
 
 function ConnectToServer() 
