@@ -1,12 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
 #region classes
 public class PlayerGetsDamageData
 {
-    public int id;
+    public PlayerGetsDamageData()
+    {
+
+    }
+
+    public int id_PlayerGetsDamage;
     public string timeStamp;
 
     public float posX;
@@ -107,11 +113,30 @@ public class ReceiveData : MonoBehaviour
         if (www.result == UnityWebRequest.Result.Success)
         {
             string jsonData = www.downloadHandler.text;
-            // Procesar jsonData según tus necesidades
-            //TODO
 
-            PlayerGetsDamageData PlayerGetsDamageData = new();
-            PlayerGetsDamageDataList.Add(PlayerGetsDamageData);
+            // Dividir las filas del JSON por salto de línea
+            string[] rows = jsonData.Split('\n');
+
+            // Procesar cada fila individualmente
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    // Deserializar la fila actual
+                    PlayerGetsDamageData dataObject = JsonUtility.FromJson<PlayerGetsDamageData>(row);
+                    PlayerGetsDamageDataList.Add(dataObject);
+                }
+            }
+
+            //object[] genericObjects = JsonUtility.FromJson<object[]>(jsonData);
+            //PlayerGetsDamageData[] dataObjects = new PlayerGetsDamageData[genericObjects.Length];
+            //for (int i = 0; i < genericObjects.Length; i++)
+            //{
+            //    dataObjects[i] = JsonUtility.FromJson<PlayerGetsDamageData>(genericObjects[i].ToString());
+            //}
+            //PlayerGetsDamageData[] PlayerGetsDamageDataArray = JsonUtility.FromJson<PlayerGetsDamageData[]>(jsonData);
+
+            //PlayerGetsDamageDataList.Add(PlayerGetsDamageData);
         }
         else
         {
