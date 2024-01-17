@@ -185,7 +185,7 @@ public class GetData : MonoBehaviour, IMessageReceiver
         form.AddField("posY", (int)Ellen.transform.position.y);
         form.AddField("posZ", (int)Ellen.transform.position.z);
         form.AddField("timeStamp", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"));
-        form.AddField("isThrowing", msg.throwing.ToString());
+        form.AddField("damageCause", msg.throwing? "Distance Attack" : "Melee Attack");
 
         UnityWebRequest www = UnityWebRequest.Post(playerGetsDmgURL, form);
 

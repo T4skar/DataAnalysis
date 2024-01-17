@@ -40,11 +40,11 @@ function UpdateData() {
    $posX = $_POST["posX"];
    $posY = $_POST["posY"];
    $posZ = $_POST["posZ"];
-   $isThrowing = $_POST["isThrowing"];
+   $damageCause = $_POST["damageCause"];
 
     global $conn;
 
-    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$isThrowing')";    
+    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$damageCause')";    
 
     if ($conn->query($sql) === TRUE) 
     {
@@ -54,22 +54,11 @@ function UpdateData() {
     {
         echo "PHP: Error al insertar datos: " . mysqli_error($conn);
     }
-
-  
 }
 
 function GetInfo() {
 
-   // Acceder a los datos enviados desde Unity
-   $timeStamp = $_POST["timeStamp"];
-   $posX = $_POST["posX"];
-   $posY = $_POST["posY"];
-   $posZ = $_POST["posZ"];
-   $isThrowing = $_POST["isThrowing"];
-
     global $conn;
-
-    //$sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$isThrowing')";    
 
     $sql = "SELECT * FROM PlayerGetsDamage";
     $result = $conn->query($sql);
@@ -77,17 +66,12 @@ function GetInfo() {
     // Verificar si hay resultados en la consulta
     if ($result->num_rows > 0) 
     {
-        // Crear un array para almacenar los resultados
-        $rows = array();
-
-        // Iterar sobre los resultados y almacenarlos en el array
-        while ($row = $result->fetch_assoc()) {
-            $rows[] = $row;
+        while ($row = $result->fetch_assoc()) 
+        {
+            // Imprimir cada fila como JSON
+            echo json_encode($row) . "\n";
         }
-
-        // Convertir el array a formato JSON y mostrarlo
-        echo json_encode($rows);
-    } 
+    }
     else 
     {
     // Mostrar un mensaje si no hay resultados
@@ -100,10 +84,8 @@ function GetInfo() {
     } 
     else 
     {
-        echo "PHP: Error al insertar datos: " . mysqli_error($conn);
+        //echo "PHP: Error al insertar datos: " . mysqli_error($conn);
     }
-
-  
 }
 
 function ConnectToServer() 

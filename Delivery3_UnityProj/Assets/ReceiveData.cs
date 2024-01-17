@@ -1,12 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
 
 #region classes
 public class PlayerGetsDamageData
 {
-    public int id;
+    public PlayerGetsDamageData()
+    {
+
+    }
+
+    public int id_PlayerGetsDamage;
     public string timeStamp;
 
     public float posX;
@@ -18,17 +24,27 @@ public class PlayerGetsDamageData
 
 public class EnemyGetsDamageData
 {
-    public int id;
-    public string timeStamp;
+    public EnemyGetsDamageData()
+    {
 
-    public float posX;
-    public float posY;
-    public float posZ;
+    }
+
+    public int id_EnemyGetsDamage;
+    public string Timestamp;
+
+    public float PosX;
+    public float PosY;
+    public float PosZ;
 }
 
 public class PlayerDeathData
 {
-    public int id;
+    public PlayerDeathData()
+    {
+
+    }
+
+    public int id_PlayerDeath;
     public string timeStamp;
 
     public float posX;
@@ -40,25 +56,36 @@ public class PlayerDeathData
 
 public class SessionsData
 {
-    public int id;
+    public SessionsData()
+    {
 
-    public string start;
-    public string end;
+    }
+
+    public int Session_Id;
+    public int User_Id;
+
+    public string Start;
+    public string End;
 }
 
 public class PlayerTrackData
 {
-    public int id;
-    public int session_id;
-    public string timeStamp;
+    public PlayerTrackData()
+    {
 
-    public float posX;
-    public float posY;
-    public float posZ;
+    }
 
-    public float rotX;
-    public float rotY;
-    public float rotZ;
+    public int id_PlayerTrack;
+    public int Session_Id;
+    public string Timestamp;
+
+    public float Pos_X;
+    public float Pos_Y;
+    public float Pos_Z;
+
+    public float Rot_X;
+    public float Rot_Y;
+    public float Rot_Z;
 }
 
 #endregion
@@ -86,6 +113,7 @@ public class ReceiveData : MonoBehaviour
         SessionsDataList.Clear();
         PlayerTrackDataList.Clear();
 
+        //Enable functions only when the tables are not empty
         StartCoroutine(Receive_PlayerGetsDamageData());
         //StartCoroutine(Receive_EnemyGetsDamageData());
         //StartCoroutine(Receive_PlayerDeathData());
@@ -107,11 +135,20 @@ public class ReceiveData : MonoBehaviour
         if (www.result == UnityWebRequest.Result.Success)
         {
             string jsonData = www.downloadHandler.text;
-            // Procesar jsonData según tus necesidades
-            //TODO
 
-            PlayerGetsDamageData PlayerGetsDamageData = new();
-            PlayerGetsDamageDataList.Add(PlayerGetsDamageData);
+            // Dividir las filas del JSON por salto de línea
+            string[] rows = jsonData.Split('\n');
+
+            // Procesar cada fila individualmente
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    // Deserializar la fila actual
+                    PlayerGetsDamageData dataObject = JsonUtility.FromJson<PlayerGetsDamageData>(row);
+                    PlayerGetsDamageDataList.Add(dataObject);
+                }
+            }
         }
         else
         {
@@ -132,11 +169,20 @@ public class ReceiveData : MonoBehaviour
         if (www.result == UnityWebRequest.Result.Success)
         {
             string jsonData = www.downloadHandler.text;
-            // Procesar jsonData según tus necesidades
-            //TODO
 
-            EnemyGetsDamageData EnemyGetsDamageData = new();
-            EnemyGetsDamageDataList.Add(EnemyGetsDamageData);
+            // Dividir las filas del JSON por salto de línea
+            string[] rows = jsonData.Split('\n');
+
+            // Procesar cada fila individualmente
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    // Deserializar la fila actual
+                    EnemyGetsDamageData dataObject = JsonUtility.FromJson<EnemyGetsDamageData>(row);
+                    EnemyGetsDamageDataList.Add(dataObject);
+                }
+            }
         }
         else
         {
@@ -156,17 +202,25 @@ public class ReceiveData : MonoBehaviour
         if (www.result == UnityWebRequest.Result.Success)
         {
             string jsonData = www.downloadHandler.text;
-            // Procesar jsonData según tus necesidades
-            //TODO
 
-            PlayerDeathData PlayerDeathData = new();
-            PlayerDeathDataList.Add(PlayerDeathData);
+            // Dividir las filas del JSON por salto de línea
+            string[] rows = jsonData.Split('\n');
+
+            // Procesar cada fila individualmente
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    // Deserializar la fila actual
+                    PlayerDeathData dataObject = JsonUtility.FromJson<PlayerDeathData>(row);
+                    PlayerDeathDataList.Add(dataObject);
+                }
+            }
         }
         else
         {
             Debug.LogError("Error: " + www.error);
         }
-        
     }
 
     public IEnumerator Receive_SessionsData()
@@ -181,17 +235,25 @@ public class ReceiveData : MonoBehaviour
         if (www.result == UnityWebRequest.Result.Success)
         {
             string jsonData = www.downloadHandler.text;
-            // Procesar jsonData según tus necesidades
-            //TODO
 
-            SessionsData SessionsData = new();
-            SessionsDataList.Add(SessionsData);
+            // Dividir las filas del JSON por salto de línea
+            string[] rows = jsonData.Split('\n');
+
+            // Procesar cada fila individualmente
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    // Deserializar la fila actual
+                    SessionsData dataObject = JsonUtility.FromJson<SessionsData>(row);
+                    SessionsDataList.Add(dataObject);
+                }
+            }
         }
         else
         {
             Debug.LogError("Error: " + www.error);
         }
-        
     }
 
     public IEnumerator Receive_PlayerTrackData()
@@ -206,17 +268,25 @@ public class ReceiveData : MonoBehaviour
         if (www.result == UnityWebRequest.Result.Success)
         {
             string jsonData = www.downloadHandler.text;
-            // Procesar jsonData según tus necesidades
-            //TODO
 
-            PlayerTrackData PlayerTrackData = new();
-            PlayerTrackDataList.Add(PlayerTrackData);
+            // Dividir las filas del JSON por salto de línea
+            string[] rows = jsonData.Split('\n');
+
+            // Procesar cada fila individualmente
+            foreach (string row in rows)
+            {
+                if (!string.IsNullOrEmpty(row))
+                {
+                    // Deserializar la fila actual
+                    PlayerTrackData dataObject = JsonUtility.FromJson<PlayerTrackData>(row);
+                    PlayerTrackDataList.Add(dataObject);
+                }
+            }
         }
         else
         {
             Debug.LogError("Error: " + www.error);
         }
-        
     }
 
 #endregion

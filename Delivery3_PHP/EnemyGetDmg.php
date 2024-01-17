@@ -8,63 +8,84 @@ $dbname = "xavierlm9";
 $conn;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-   UpdateSession();
-} else {
-   echo "Sessions PHP: Método no permitido \n";
-}
 
-function UpdateSession() {
-
-   // Acceder a los datos enviados desde Unity
-   $sessionId = $_POST["sessionId"];
-   $start = $_POST["start"];
-   $userId = $_POST["userId"];
-   $timeStamp = $_POST["timeStamp"];
-
-   global $conn;
-
-   if(ConnectToServer() == false)
-   {
-       return;
-   }
-
-    // Comprobar si es una session nueva o no
-    if($start == "True")
+    if(ConnectToServer() == false)
     {
-        $sql = "INSERT INTO Sessions ( Start_Timestamp, User_id) VALUES ('$timeStamp','$userId')";
-
-            if ($conn->query($sql) === TRUE) {
-                echo $conn->insert_id;
-            } 
-            else 
-            {
-                echo "Sessions PHP: Error al insertar datos: " . mysqli_error($conn);
-            }
-    }
-    else
-    {
-
-        if($sessionId != -1)
-        {
-            // Si no es una session nueva busca en la tabla la session q tiene la misma id
-
-            $sql = "UPDATE Sessions SET End_Timestamp = '$timeStamp' WHERE Session_Id = $sessionId";
-
-            if ($conn->query($sql) === TRUE) 
-            {
-                echo $sessionId;
-            } 
-            else 
-            {
-                echo "Error al actualizar el registro: " . $conn->error;
-            }
-        
-        }
+        return;
     }
 
+    $methodToCall = $_POST["methodToCall"];
+
+    if($methodToCall == "Set Info")
+    {
+        UpdateData();
+    }
+    else if($methodToCall == "Get Info")
+    {
+        GetInfo();
+    }
     
 
-   CloseConnection();
+    CloseConnection();
+} 
+else 
+{
+   echo "PHP: Método no permitido \n";
+}
+
+function UpdateData() {
+
+   // Acceder a los datos enviados desde Unity
+   $timeStamp = $_POST["timeStamp"];
+   $posX = $_POST["posX"];
+   $posY = $_POST["posY"];
+   $posZ = $_POST["posZ"];
+   $damageCause = $_POST["damageCause"];
+
+    global $conn;
+
+    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$damageCause')";    
+
+    if ($conn->query($sql) === TRUE) 
+    {
+        echo "Data Sent";
+    } 
+    else 
+    {
+        echo "PHP: Error al insertar datos: " . mysqli_error($conn);
+    }
+}
+
+function GetInfo() {
+
+    global $conn;
+
+    $sql = "SELECT * FROM PlayerGetsDamage";
+    $result = $conn->query($sql);
+    
+    // Verificar si hay resultados en la consulta
+    if ($result->num_rows > 0) 
+    {
+        while ($row = $result->fetch_assoc()) 
+        {
+            // Imprimir cada fila como JSON
+            echo json_encode($row) . "\n";
+        }
+    }
+    else 
+    {
+    // Mostrar un mensaje si no hay resultados
+    echo "0 resultados";
+    }
+
+    if ($conn->query($sql) === TRUE) 
+    {
+        //echo "Data Sent";
+    } 
+    else 
+    {
+        //echo "PHP: Error al insertar datos: " . mysqli_error($conn);
+    }
 }
 
 function ConnectToServer() 
@@ -75,7 +96,7 @@ function ConnectToServer()
    $conn = new mysqli($servername, $username, $password, $dbname);
 
    if ($conn->connect_error) {
-       die("Sessions PHP: Conexión fallida: " . $conn->connect_error);
+       die("PHP: Conexión fallida: " . $conn->connect_error);
    }
 
    return true;

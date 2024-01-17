@@ -1,0 +1,11 @@
+<br />
+<b>Notice</b>:  Undefined index: timeStamp in <b>/home/xavierlm9/public_html/PlayerGetsDmg.php</b> on line <b>64</b><br />
+<br />
+<b>Notice</b>:  Undefined index: posX in <b>/home/xavierlm9/public_html/PlayerGetsDmg.php</b> on line <b>65</b><br />
+<br />
+<b>Notice</b>:  Undefined index: posY in <b>/home/xavierlm9/public_html/PlayerGetsDmg.php</b> on line <b>66</b><br />
+<br />
+<b>Notice</b>:  Undefined index: posZ in <b>/home/xavierlm9/public_html/PlayerGetsDmg.php</b> on line <b>67</b><br />
+<br />
+<b>Notice</b>:  Undefined index: isThrowing in <b>/home/xavierlm9/public_html/PlayerGetsDmg.php</b> on line <b>68</b><br />
+[{"id_PlayerGetsDamage":"1","Timestamp":"2024-01-10 00:00:00","PosX":"-25","PosY":"0","PosZ":"33","DamageCause":"False"},{"id_PlayerGetsDamage":"2","Timestamp":"2024-01-10 00:00:00","PosX":"-25","PosY":"0","PosZ":"32","DamageCause":"False"},{"id_PlayerGetsDamage":"3","Timestamp":"2024-01-15 00:00:00","PosX":"-18","PosY":"0","PosZ":"31","DamageCause":"True"},{"id_PlayerGetsDamage":"4","Timestamp":"2024-01-15 00:00:00","PosX":"-22","PosY":"0","PosZ":"28","DamageCause":"False"},{"id_PlayerGetsDamage":"5","Timestamp":"2024-01-15 00:00:00","PosX":"-20","PosY":"0","PosZ":"27","DamageCause":"False"}]PHP: Error al insertar datos: 
