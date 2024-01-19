@@ -15,9 +15,10 @@ public class HeatMapGenerator : MonoBehaviour
         try
         {
 
-            SerializeJson();
-            SerializeJsonList();
-            SerializeJsonList2();
+            //SerializeJson();
+            //SerializeJsonList();
+            //SerializeJsonList2();
+            SerializeJsonList3();
             Debug.Log("Ha FUNCIONADO el escribir en JASON");
         }
         catch 
@@ -33,10 +34,17 @@ public class HeatMapGenerator : MonoBehaviour
     //public List<TestClass> testlist = new List<TestClass>();
 
     public TestClassList testlist= new TestClassList();
+    public TestClass[] dataarray = new TestClass[]
+    {
+        new TestClass{Position=new Vector3(33.23f,23,232.333f),EventName="Object Position"},
+        new TestClass{Position=new Vector3(3544.23f,233,233.333f),EventName="Object Position"},
+        new TestClass{Position=new Vector3(23.23f,23,2432.333f),EventName="Object Position"}
+    };
 
     public TestClasslis2 testClasslis2 = new TestClasslis2();
     void SerializeJson()
     {
+        string filePath = "Assets/playerData2.json";
         var t = new TestClass();
         string a;
        
@@ -45,16 +53,16 @@ public class HeatMapGenerator : MonoBehaviour
        // a = "\"Position\":{\"x\":" + t.posX.ToString() + ",\"y\":" + t.posY.ToString() + ",\"z\":" + t.posX.ToString() + "},\"EventName\":\"Object Position\"";
         string json = JsonUtility.ToJson(t);
         Stream stream = new MemoryStream();
-        BinaryWriter writer = new BinaryWriter(stream);
-        writer.Write(json);
-        
+        //BinaryWriter writer = new BinaryWriter(stream);
+        //writer.Write(json);
+        StreamWriter writer2 = new StreamWriter("Assets/playerData2.json", true);
+        writer2.Write(json);
         // Path to save the JSON file
-        string filePath = /*Application.persistentDataPath +*/ "Assets/playerData2.json";
 
         // Write the JSON string to a text file
         File.WriteAllText(filePath,json);
         
-        Debug.Log("JSON data saved to: " + filePath);
+       // Debug.Log("JSON data saved to: " + filePath);
     }
     void SerializeJsonList()
     {
@@ -90,6 +98,31 @@ public class HeatMapGenerator : MonoBehaviour
         
         Debug.Log("JSON data saved to: " + filePath);
     }
+    void SerializeJsonList3()
+    {
+        
+        string filePath = Application.dataPath + "/playerData2.json";
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            foreach (TestClass item in dataarray)
+            {
+
+                string json = JsonUtility.ToJson(item);
+
+                writer.WriteLine(json);
+            }
+        }
+        //Stream stream = new MemoryStream();
+        
+        // Path to save the JSON file
+        //string filePath = /*Application.persistentDataPath +*/ "Assets/playerDataList4.json";
+
+        // Write the JSON string to a text file
+        //File.WriteAllText(filePath,json);
+        
+        //Debug.Log("JSON data saved to: " + filePath);
+    }
+
 }
 [System.Serializable]
 public class TestClass
