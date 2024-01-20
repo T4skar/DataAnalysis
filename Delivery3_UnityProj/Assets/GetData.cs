@@ -41,120 +41,6 @@ public class GetData : MonoBehaviour, IMessageReceiver
 
     }
 
-    // === La chicha (IEnumerators) ===
-    private IEnumerator SendPlayerData(string playerName, int playerAge, string playerGender, string playerCountry, DateTime signUpTime, string url)
-    {
-        WWWForm form = new WWWForm();
-
-        form.AddField("methodToCall", "CreatePlayer");
-
-        form.AddField("playerName", playerName);
-        form.AddField("playerAge", playerAge);
-        form.AddField("playerGender", playerGender);
-        form.AddField("playerCountry", playerCountry);
-        form.AddField("signUpTime", signUpTime.ToString("yyyy-MM-dd HH:mm:ss"));
-
-        UnityWebRequest www = UnityWebRequest.Post(url, form);
-
-        yield return www.SendWebRequest();
-
-        int temporalUserID;
-
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log("Error: " + www.error);
-            temporalUserID = -1;
-        }
-        else
-        {
-            Debug.Log("Form upload to " + url + " complete!");
-            Debug.Log(www.downloadHandler.text);
-            temporalUserID = int.Parse(www.downloadHandler.text);
-        }
-
-        if (temporalUserID != -1)
-        {
-            //CallbackEvents.OnAddPlayerCallback.Invoke(temporalUserID);
-        }
-    }
-
-    private IEnumerator SendSessionData(int userId, DateTime date, bool startSession, string url, int sessionId = -1)
-    {
-        WWWForm form = new WWWForm();
-
-        form.AddField("sessionId", sessionId);
-        form.AddField("start", startSession.ToString());
-        form.AddField("userId", userId);
-        form.AddField("timeStamp", date.ToString("yyyy-MM-dd HH:mm:ss"));
-
-        UnityWebRequest www = UnityWebRequest.Post(url, form);
-
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log("Error: " + www.error);
-            sessionId = -1;
-        }
-        else
-        {
-            Debug.Log("Form upload to " + url + " complete!");
-            if (startSession)
-            {
-                Debug.Log("Session started: " + www.downloadHandler.text);
-            }
-            else
-            {
-                Debug.Log("Session ended: " + www.downloadHandler.text);
-            }
-            sessionId = int.Parse(www.downloadHandler.text);
-        }
-
-        if (startSession)
-        {
-            if (sessionId != -1)
-            {
-                //CallbackEvents.OnNewSessionCallback.Invoke(userId, sessionId);
-            }
-        }
-        else
-        {
-            if (sessionId != -1)
-            {
-                //CallbackEvents.OnEndSessionCallback.Invoke(userId);
-            }
-        }
-
-    }
-
-    private IEnumerator SendPurchaseData(DateTime date, int userId, int itemId, string url, int sessionId)
-    {
-        WWWForm form = new WWWForm();
-
-        form.AddField("itemId", itemId);
-        form.AddField("userId", userId);
-        form.AddField("timeStamp", date.ToString("yyyy-MM-dd HH:mm:ss"));
-
-        UnityWebRequest www = UnityWebRequest.Post(url, form);
-
-        yield return www.SendWebRequest();
-
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log("Error: " + www.error);
-        }
-        else
-        {
-            Debug.Log("Form upload to " + url + " complete!");
-            if (www.downloadHandler.text != null)
-            {
-                Debug.Log("Item ID: " + www.downloadHandler.text);
-            }
-        }
-
-        //CallbackEvents.OnItemBuyCallback.Invoke(sessionId, userId);
-    }
-
     public void OnReceiveMessage(MessageType type, object sender, object msg)
     {
         Debug.Log("Message recieved");
@@ -184,7 +70,7 @@ public class GetData : MonoBehaviour, IMessageReceiver
         form.AddField("posX", (int)Ellen.transform.position.x);
         form.AddField("posY", (int)Ellen.transform.position.y);
         form.AddField("posZ", (int)Ellen.transform.position.z);
-        form.AddField("timeStamp", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
         form.AddField("damageCause", msg.throwing? "Distance Attack" : "Melee Attack");
 
         UnityWebRequest www = UnityWebRequest.Post(playerGetsDmgURL, form);
