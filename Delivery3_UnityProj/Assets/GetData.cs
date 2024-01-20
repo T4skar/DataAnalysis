@@ -3,6 +3,7 @@ using Gamekit3D.Message;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -22,6 +23,13 @@ public class GetData : MonoBehaviour, IMessageReceiver
     [SerializeField]
     List<Damageable> enemies = new();
 
+    [SerializeField][Tooltip("Delay in sec. between player gets tracked")] float trackPlayerCooldown = 1f;
+    float trackCounter;
+
+    [Range(0, 13)] public int userId;
+
+    [SerializeField] int sessionId;
+
     void OnEnable()
     {
         Ellen.onDamageMessageReceivers.Add(this);
@@ -30,15 +38,37 @@ public class GetData : MonoBehaviour, IMessageReceiver
         {
             damageable.onDamageMessageReceivers.Add(this);
         }
+
+        StartCoroutine(Send_Sessions(true));
+
+        trackCounter = trackPlayerCooldown;
+
+        StartCoroutine(Send_PlayerTrack());
     }
 
     void OnDisable()
     {
+        StartCoroutine(Send_Sessions(false));
     }
 
-    private void Start()
+    public IEnumerator Send_Sessions(bool isStarting)
     {
+        Debug.Log("Session Data");
 
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Set Session");
+
+        form.AddField("user", userId);
+        form.AddField("session", sessionId);
+        form.AddField("starting", isStarting.ToString());
+        form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+
+        UnityWebRequest www = UnityWebRequest.Post(playerDeathURL, form);
+
+        yield return www.SendWebRequest();
+
+        CheckPHPLog(www);
     }
 
     public void OnReceiveMessage(MessageType type, object sender, object msg)
@@ -48,6 +78,7 @@ public class GetData : MonoBehaviour, IMessageReceiver
         switch (type)
         {
             case MessageType.DAMAGED:
+                
                 StartCoroutine(Send_PlayerGetsDamage(sender, (Damageable.DamageMessage)msg));
                 break;
 
@@ -71,28 +102,20 @@ public class GetData : MonoBehaviour, IMessageReceiver
         form.AddField("posY", (int)Ellen.transform.position.y);
         form.AddField("posZ", (int)Ellen.transform.position.z);
         form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
-        form.AddField("damageCause", msg.throwing? "Distance Attack" : "Melee Attack");
+        form.AddField("damageCause", msg.throwing ? "Distance Attack" : "Melee Attack");
 
         UnityWebRequest www = UnityWebRequest.Post(playerGetsDmgURL, form);
 
         yield return www.SendWebRequest();
 
-        if (www.result != UnityWebRequest.Result.Success)
-        {
-            Debug.Log("Error: " + www.error);
-        }
-        else
-        {
-            Debug.Log(www.downloadHandler.text);
-        }
-
+        CheckPHPLog(www);
     }
 
     public IEnumerator Send_EnemyGetsDamage(object sender, Damageable.DamageMessage msg)
     {
         WWWForm form = new();
 
-        form.AddField("methodToCall", "Apply Dmg");
+        form.AddField("methodToCall", "Set Info");
 
         form.AddField("posX", msg.damager.transform.position.x.ToString());
         form.AddField("posY", msg.damager.transform.position.y.ToString());
@@ -102,32 +125,69 @@ public class GetData : MonoBehaviour, IMessageReceiver
         UnityWebRequest www = UnityWebRequest.Post(enemyGetsDmgURL, form);
 
         yield return www.SendWebRequest();
+
+        CheckPHPLog(www);
     }
 
     public IEnumerator Send_PlayerDeath(object sender, Damageable.DamageMessage msg)
     {
         WWWForm form = new();
 
-        form.AddField("methodToCall", "Player Death");
+        form.AddField("methodToCall", "Set Info");
 
-        form.AddField("posX", Ellen.transform.position.x.ToString());
-        form.AddField("posY", Ellen.transform.position.y.ToString());
-        form.AddField("posZ", Ellen.transform.position.z.ToString());
-        form.AddField("timeStamp", DateTime.Today.ToString("yyyy-MM-dd HH:mm:ss"));
-        form.AddField("isThrowing", msg.throwing.ToString());
+        form.AddField("posX", (int)Ellen.transform.position.x);
+        form.AddField("posY", (int)Ellen.transform.position.y);
+        form.AddField("posZ", (int)Ellen.transform.position.z);
+        form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("damageCause", msg.throwing ? "Distance Attack" : "Melee Attack");
 
         UnityWebRequest www = UnityWebRequest.Post(playerDeathURL, form);
 
         yield return www.SendWebRequest();
+
+        CheckPHPLog(www);
     }
 
-    public void Send_Sessions()
+    public IEnumerator Send_PlayerTrack()
     {
+        if (trackPlayerCooldown > 0)
+        {
+            trackPlayerCooldown = trackCounter;
+            yield return null;
+        }
+        else
+        {
+            trackPlayerCooldown -= Time.deltaTime;
+        }
 
+        WWWForm form = new();
+
+        form.AddField("methodToCall", "Set Info");
+
+        form.AddField("posX", (int)Ellen.transform.position.x);
+        form.AddField("posY", (int)Ellen.transform.position.y);
+        form.AddField("posZ", (int)Ellen.transform.position.z);
+        form.AddField("rotX", (int)Ellen.transform.rotation.eulerAngles.x);
+        form.AddField("rotY", (int)Ellen.transform.rotation.eulerAngles.y);
+        form.AddField("rotZ", (int)Ellen.transform.rotation.eulerAngles.z);
+        form.AddField("timeStamp", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"));
+
+        UnityWebRequest www = UnityWebRequest.Post(playerDeathURL, form);
+
+        yield return www.SendWebRequest();
+
+        CheckPHPLog(www);
     }
 
-    public void Send_PlayerTrack()
+    void CheckPHPLog(UnityWebRequest www)
     {
-
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Error: " + www.error);
+        }
+        else
+        {
+            Debug.Log(www.downloadHandler.text);
+        }
     }
 }

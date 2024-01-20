@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $methodToCall = $_POST["methodToCall"];
 
-    if($methodToCall == "Set Info")
+    if($methodToCall == "Set Session")
     {
         UpdateData();
     }
@@ -24,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     {
         GetInfo();
     }
-    
 
     CloseConnection();
 } 
@@ -34,21 +33,28 @@ else
 }
 
 function UpdateData() {
-
-   // Acceder a los datos enviados desde Unity
-   $timeStamp = $_POST["timeStamp"];
-   $posX = $_POST["posX"];
-   $posY = $_POST["posY"];
-   $posZ = $_POST["posZ"];
-   $damageCause = $_POST["damageCause"];
+    $timeStamp = $_POST["timeStamp"];
+    $user = $_POST["user"];
+    $starting = $_POST["starting"];
+    $session = $_POST["session"];
 
     global $conn;
 
-    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$damageCause')";    
+    // Fechas de inicio y fin de la session
+    if ($starting == "True")
+    {
+        $sql = "INSERT INTO Sessions (User_Id, Start) VALUES ('$user', '$timeStamp')"; 
+    }
+    else
+    {
+        $sql = "UPDATE Sessions SET End = '$timeStamp' WHERE Session_Id = $session";
+    }
 
+    // Tratar de obtener la session id (autoincremental) de SQL
     if ($conn->query($sql) === TRUE) 
     {
-        echo "Data Sent";
+        $sql = "SELECT Session_Id FROM Sessions WHERE Session_Id = $session"; 
+        echo $session;
     } 
     else 
     {

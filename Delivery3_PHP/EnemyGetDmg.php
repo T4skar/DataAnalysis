@@ -24,7 +24,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     {
         GetInfo();
     }
-    
 
     CloseConnection();
 } 
@@ -40,7 +39,6 @@ function UpdateData() {
    $posX = $_POST["posX"];
    $posY = $_POST["posY"];
    $posZ = $_POST["posZ"];
-   $damageCause = $_POST["damageCause"];
 
     global $conn;
 
