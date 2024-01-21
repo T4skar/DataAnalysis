@@ -207,7 +207,7 @@ public class ReceiveData : MonoBehaviour
     {
         WWWForm form = new();
         form.AddField("methodToCall", "Get Info");
-        form.AddField("isEnemy", true.ToString());
+        form.AddField("isEnemy", 1);
 
         UnityWebRequest www = UnityWebRequest.Post(playerDeathURL, form);
 
@@ -243,7 +243,7 @@ public class ReceiveData : MonoBehaviour
     {
         WWWForm form = new();
         form.AddField("methodToCall", "Get Info");
-        form.AddField("isEnemy", false.ToString());
+        form.AddField("isEnemy", 0);
 
         UnityWebRequest www = UnityWebRequest.Post(playerDeathURL, form);
 

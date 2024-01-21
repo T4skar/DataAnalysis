@@ -68,7 +68,7 @@ function GetInfo() {
     global $conn;
     $isEnemy = $_POST["isEnemy"];
 
-    if( $isEnemy == true)
+    if($isEnemy == 1)
     {
         $sql = "SELECT * FROM EnemyDeath";
     }
