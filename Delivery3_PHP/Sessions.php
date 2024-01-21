@@ -53,8 +53,7 @@ function UpdateData() {
     // Tratar de obtener la session id (autoincremental) de SQL
     if ($conn->query($sql) === TRUE) 
     {
-        $sql = "SELECT Session_Id FROM Sessions WHERE Session_Id = $session"; 
-        echo $session;
+        echo $conn->insert_id;
     } 
     else 
     {

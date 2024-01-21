@@ -37,6 +37,7 @@ function UpdateData() {
 
     $user = $_POST["user"];
     $entity = $_POST["entity"];
+    $entityId = $_POST["entityId"];
     $timeStamp = $_POST["timeStamp"];
     $posX = $_POST["posX"];
     $posY = $_POST["posY"];
@@ -49,7 +50,7 @@ function UpdateData() {
         $sql = "INSERT INTO PlayerDeath (user_id, Timestamp, PosX, PosY, PosZ, DeathCause) VALUES ($user,'$timeStamp',$posX, $posY, $posZ,'$deathCause')";   
     }
     else{
-        $sql = "INSERT INTO EnemyDeath (entity_id, Timestamp, PosX, PosY, PosZ, DeathCause) VALUES ($entity,'$timeStamp',$posX, $posY, $posZ,'$deathCause')";   
+        $sql = "INSERT INTO EnemyDeath (user_id, entity_id, Timestamp, PosX, PosY, PosZ, DeathCause) VALUES ($user,$entityId,'$timeStamp',$posX, $posY, $posZ,'$deathCause')";   
     }
 
     if ($conn->query($sql) === TRUE) 

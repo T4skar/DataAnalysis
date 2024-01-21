@@ -23,6 +23,7 @@ namespace Gamekit3D
                     stopCamera = true
                 };
 
+                pc.isInvulnerable = false;
                 pc.ApplyDamage(msg);
             }
             if (audio != null)
