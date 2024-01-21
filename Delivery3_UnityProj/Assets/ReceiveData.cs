@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 #region classes
 public class PlayerGetsDamageData
@@ -110,6 +112,23 @@ public class ReceiveData : MonoBehaviour
     public List<PlayerTrackData> PlayerTrackDataList = new();
 
     public static ReceiveData Instance;
+
+    public List<string> enemyDeathCauses = new();
+    public List<string> playerDeathCauses = new();
+    public List<string> playerGetsDmgCauses = new();
+    public List<string> userIDs = new();
+
+    public TMP_Dropdown enemyDeathCausesDropDown;
+    public TMP_Dropdown playerDeathCausesDropDown;
+    public TMP_Dropdown playerGetsDmgCausesDropDown;
+    public TMP_Dropdown userIDDropDown;
+
+    public bool endedGetData1;
+    public bool endedGetData2;
+    public bool endedGetData3;
+    public bool endedGetData4;
+    public bool endedGetData5;
+
     public void OnEnable()
     {
         if (Instance == null)
@@ -121,8 +140,15 @@ public class ReceiveData : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     public void Start()
     {
+        endedGetData1 = false;
+        endedGetData2 = false;
+        endedGetData3 = false;
+        endedGetData4 = false;
+        endedGetData5 = false;
+
         PlayerGetsDamageDataList.Clear();
         EnemyGetsDamageDataList.Clear();
         PlayerDeathDataList.Clear();
@@ -135,6 +161,8 @@ public class ReceiveData : MonoBehaviour
         StartCoroutine(Receive_PlayerDeathData());
         StartCoroutine(Receive_SessionsData());
         StartCoroutine(Receive_PlayerTrackData());
+
+        
     }
 
     #region receive methods
@@ -170,7 +198,9 @@ public class ReceiveData : MonoBehaviour
         {
             Debug.LogError("Error: " + www.error);
         }
-        
+
+        endedGetData1 = true;
+
     }
 
     public IEnumerator Receive_EnemyGetsDamageData()
@@ -205,6 +235,8 @@ public class ReceiveData : MonoBehaviour
         {
             Debug.LogError("Error: " + www.error);
         }
+
+        endedGetData2 = true;
     }
 
     public IEnumerator Receive_PlayerDeathData()
@@ -239,6 +271,8 @@ public class ReceiveData : MonoBehaviour
         {
             Debug.LogError("Error: " + www.error);
         }
+
+        endedGetData3 = true;
     }
 
     public IEnumerator Receive_SessionsData()
@@ -272,6 +306,8 @@ public class ReceiveData : MonoBehaviour
         {
             Debug.LogError("Error: " + www.error);
         }
+
+        endedGetData4 = true;
     }
 
     public IEnumerator Receive_PlayerTrackData()
@@ -305,8 +341,90 @@ public class ReceiveData : MonoBehaviour
         {
             Debug.LogError("Error: " + www.error);
         }
+
+        endedGetData5 = true;
     }
 
-#endregion
+    #endregion
+
+    private void Update()
+    {
+        if(endedGetData1 && endedGetData2 && endedGetData3 && endedGetData4 && endedGetData5)
+        {
+            endedGetData1 = false;
+            endedGetData2 = false;
+            endedGetData3 = false;
+            endedGetData4 = false;
+            endedGetData5 = false;
+
+            foreach (EnemyDeathData enemyDeath in EnemyGetsDamageDataList)
+            {
+                if (!enemyDeathCauses.Contains(enemyDeath.deathCause))
+                {
+                    enemyDeathCauses.Add(enemyDeath.deathCause);
+                }
+            }
+
+            enemyDeathCausesDropDown.ClearOptions();
+
+            foreach (string cause in enemyDeathCauses)
+            {
+                enemyDeathCausesDropDown.options.Add(new TMP_Dropdown.OptionData(cause));
+            }
+
+            foreach (PlayerDeathData playerDeath in PlayerDeathDataList)
+            {
+                if (!playerDeathCauses.Contains(playerDeath.deathCause))
+                {
+                    playerDeathCauses.Add(playerDeath.deathCause);
+                }
+            }
+
+            playerDeathCausesDropDown.ClearOptions();
+
+            foreach (string cause in playerDeathCauses)
+            {
+                playerDeathCausesDropDown.options.Add(new TMP_Dropdown.OptionData(cause));
+            }
+
+            foreach (PlayerGetsDamageData playerGetsDmg in PlayerGetsDamageDataList)
+            {
+                if (!playerGetsDmgCauses.Contains(playerGetsDmg.damageCause))
+                {
+                    playerGetsDmgCauses.Add(playerGetsDmg.damageCause);
+                }
+            }
+
+            playerGetsDmgCausesDropDown.ClearOptions();
+
+            foreach (string cause in playerGetsDmgCauses)
+            {
+                playerGetsDmgCausesDropDown.options.Add(new TMP_Dropdown.OptionData(cause));
+            }
+
+            foreach (SessionsData session in SessionsDataList)
+            {
+                if (!userIDs.Contains(session.User_Id.ToString()))
+                {
+                    userIDs.Add(session.User_Id.ToString());
+                }
+            }
+
+            userIDDropDown.ClearOptions();
+
+            foreach (string userId in userIDs)
+            {
+                userIDDropDown.options.Add(new TMP_Dropdown.OptionData(userId));
+            }
+
+            //          public TMP_Dropdown enemyDeathCausesDropDown;
+            //public TMP_Dropdown playerDeathCausesDropDown;
+            //public TMP_Dropdown playerGetsDmgCausesDropDown;
+            //public TMP_Dropdown userIDDropDown;
+
+
+
+        }
+    }
 
 }
