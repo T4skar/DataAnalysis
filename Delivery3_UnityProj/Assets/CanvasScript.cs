@@ -5,14 +5,9 @@ using UnityEngine.UI;
 
 public class CanvasScript : MonoBehaviour
 {
-    [SerializeField] Dropdown playersDropdown;
-    List<string> playerIds = new();
-
     void Start()
     {
-        // Igualar playerIds a todos los userIds o sessionId que haya (Seguramente haya q pasar ints a string)
 
-        playersDropdown.AddOptions(playerIds);
     }
 
     void Update()
