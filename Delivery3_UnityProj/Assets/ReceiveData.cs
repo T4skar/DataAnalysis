@@ -122,6 +122,7 @@ public class ReceiveData : MonoBehaviour
     public TMP_Dropdown playerDeathCausesDropDown;
     public TMP_Dropdown playerGetsDmgCausesDropDown;
     public TMP_Dropdown userIDDropDown;
+    public TMP_Dropdown heatmapType;
 
     public bool endedGetData1;
     public bool endedGetData2;
@@ -148,6 +149,11 @@ public class ReceiveData : MonoBehaviour
         endedGetData3 = false;
         endedGetData4 = false;
         endedGetData5 = false;
+
+        enemyDeathCauses.Clear();
+        playerDeathCauses.Clear();
+        playerGetsDmgCauses.Clear();
+        userIDs.Clear();
 
         PlayerGetsDamageDataList.Clear();
         EnemyGetsDamageDataList.Clear();
@@ -367,6 +373,7 @@ public class ReceiveData : MonoBehaviour
 
             enemyDeathCausesDropDown.ClearOptions();
 
+            enemyDeathCausesDropDown.options.Add(new TMP_Dropdown.OptionData("All"));
             foreach (string cause in enemyDeathCauses)
             {
                 enemyDeathCausesDropDown.options.Add(new TMP_Dropdown.OptionData(cause));
@@ -382,6 +389,7 @@ public class ReceiveData : MonoBehaviour
 
             playerDeathCausesDropDown.ClearOptions();
 
+            playerDeathCausesDropDown.options.Add(new TMP_Dropdown.OptionData("All"));
             foreach (string cause in playerDeathCauses)
             {
                 playerDeathCausesDropDown.options.Add(new TMP_Dropdown.OptionData(cause));
@@ -397,6 +405,7 @@ public class ReceiveData : MonoBehaviour
 
             playerGetsDmgCausesDropDown.ClearOptions();
 
+            playerGetsDmgCausesDropDown.options.Add(new TMP_Dropdown.OptionData("All"));
             foreach (string cause in playerGetsDmgCauses)
             {
                 playerGetsDmgCausesDropDown.options.Add(new TMP_Dropdown.OptionData(cause));
@@ -412,18 +421,11 @@ public class ReceiveData : MonoBehaviour
 
             userIDDropDown.ClearOptions();
 
+            userIDDropDown.options.Add(new TMP_Dropdown.OptionData("All"));
             foreach (string userId in userIDs)
             {
                 userIDDropDown.options.Add(new TMP_Dropdown.OptionData(userId));
             }
-
-            //          public TMP_Dropdown enemyDeathCausesDropDown;
-            //public TMP_Dropdown playerDeathCausesDropDown;
-            //public TMP_Dropdown playerGetsDmgCausesDropDown;
-            //public TMP_Dropdown userIDDropDown;
-
-
-
         }
     }
 

@@ -258,6 +258,49 @@ public class HeatMapGenerator : MonoBehaviour
     }
 
 
+    public void TakeDropdownOptions()
+    {
+        
+
+        string heatmapType = ReceiveData.Instance.heatmapType.options[ReceiveData.Instance.heatmapType.value].text.ToString();
+
+        string userID = ReceiveData.Instance.userIDDropDown.options[ReceiveData.Instance.userIDDropDown.value].text.ToString();
+
+        int userIDInt = -1;
+
+        if(userID != "All")
+        {
+            userIDInt = int.Parse(userID);
+        }
+
+        switch (heatmapType)
+        {
+            case "Player Tracks":
+
+                break;
+
+            case "Player Deaths":
+
+                string playerDeathCause = ReceiveData.Instance.playerDeathCausesDropDown.options[ReceiveData.Instance.playerDeathCausesDropDown.value].text.ToString();
+                
+                break;
+
+            case "Player Gets Damage":
+
+                string playerGetsDamageCause = ReceiveData.Instance.playerGetsDmgCausesDropDown.options[ReceiveData.Instance.playerGetsDmgCausesDropDown.value].text.ToString();
+
+                break;
+
+            case "Enemy Deaths":
+
+                string enemyDeaths = ReceiveData.Instance.enemyDeathCausesDropDown.options[ReceiveData.Instance.enemyDeathCausesDropDown.value].text.ToString();
+
+                break;
+        }
+
+    }
+
+
 }
 [System.Serializable]
 public class TestClass
