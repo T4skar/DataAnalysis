@@ -66,8 +66,18 @@ function UpdateData() {
 function GetInfo() {
 
     global $conn;
+    $isEnemy = $_POST["isEnemy"];
 
-    $sql = "SELECT * FROM PlayerGetsDamage";
+    if( $isEnemy == true)
+    {
+        $sql = "SELECT * FROM EnemyDeath";
+    }
+    else
+    {
+        $sql = "SELECT * FROM PlayerDeath";
+    }
+
+    
     $result = $conn->query($sql);
     
     // Verificar si hay resultados en la consulta

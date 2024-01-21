@@ -65,7 +65,7 @@ function GetInfo() {
 
     global $conn;
 
-    $sql = "SELECT * FROM PlayerGetsDamage";
+    $sql = "SELECT * FROM Sessions";
     $result = $conn->query($sql);
     
     // Verificar si hay resultados en la consulta

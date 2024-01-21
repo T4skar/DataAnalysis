@@ -16,7 +16,7 @@ public class HeatMapGenerator : MonoBehaviour
    };
 
     TestClass[] PlayerGetsDamage = null;
-    List<TestClass> PlayerGetsDamage2 = new();
+    //List<TestClass> PlayerGetsDamage2 = new();
     TestClass[] EnemyGetsDamage = null;
     TestClass[] PlayerDeath = null;
     TestClass[] Sessions = null;
@@ -46,7 +46,7 @@ public class HeatMapGenerator : MonoBehaviour
 
     public void GenerateFiles()
     {
-        try
+        //try
         {
 
             int dmgCount = 0;
@@ -54,6 +54,7 @@ public class HeatMapGenerator : MonoBehaviour
             foreach (PlayerGetsDamageData item in ReceiveData.Instance.PlayerGetsDamageDataList)
             {
                 //PlayerGetsDamage[dmgCount]= ( Position = new Vector3(item.posX, item.posY, item.posZ),EventName = eventName )
+                PlayerGetsDamage[dmgCount] = new TestClass();
                 PlayerGetsDamage[dmgCount].Position = new Vector3(item.posX, item.posY, item.posZ);
                 PlayerGetsDamage[dmgCount].EventName = eventName;
                 
@@ -68,11 +69,11 @@ public class HeatMapGenerator : MonoBehaviour
 
             Debug.Log("Ha FUNCIONADO el escribir en JASON");
         }
-        catch
+        //catch
 
-        {
-            Debug.Log("Ha fallado el escribir en JASON");
-        }
+        //{
+        //    Debug.Log("Ha fallado el escribir en JASON");
+        //}
 
         //try
         //{

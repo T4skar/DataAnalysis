@@ -13,6 +13,7 @@ public class PlayerGetsDamageData
     }
 
     public int id_PlayerGetsDamage;
+    public int user_id;
     public string timeStamp;
 
     public float posX;
@@ -22,19 +23,23 @@ public class PlayerGetsDamageData
     public string damageCause;
 }
 
-public class EnemyGetsDamageData
+public class EnemyDeathData
 {
-    public EnemyGetsDamageData()
+    public EnemyDeathData()
     {
 
     }
 
-    public int id_EnemyGetsDamage;
-    public string Timestamp;
+    public int id_EnemyDeath;
+    public int user_id;
+    public int entity_id;
+    public string timestamp;
 
-    public float PosX;
-    public float PosY;
-    public float PosZ;
+    public float posX;
+    public float posY;
+    public float posZ;
+
+    public string deathCause;
 }
 
 public class PlayerDeathData
@@ -45,7 +50,8 @@ public class PlayerDeathData
     }
 
     public int id_PlayerDeath;
-    public string timeStamp;
+    public int user_id;
+    public string timestamp;
 
     public float posX;
     public float posY;
@@ -76,16 +82,16 @@ public class PlayerTrackData
     }
 
     public int id_PlayerTrack;
-    public int Session_Id;
-    public string Timestamp;
+    public int user_id;
+    public string timestamp;
 
-    public float Pos_X;
-    public float Pos_Y;
-    public float Pos_Z;
+    public float posX;
+    public float posY;
+    public float posZ;
 
-    public float Rot_X;
-    public float Rot_Y;
-    public float Rot_Z;
+    public float rotX;
+    public float rotY;
+    public float rotZ;
 }
 
 #endregion
@@ -94,12 +100,11 @@ public class ReceiveData : MonoBehaviour
 {
     [SerializeField] string sessionsUrl = "https://citmalumnes.upc.es/~xavierlm9/Sessions.php";
     [SerializeField] string playerGetsDmgURL = "https://citmalumnes.upc.es/~xavierlm9/PlayerGetsDmg.php";
-    [SerializeField] string enemyGetsDmgURL = "https://citmalumnes.upc.es/~xavierlm9/EnemyGetsDmg.php";
     [SerializeField] string playerDeathURL = "https://citmalumnes.upc.es/~xavierlm9/PlayerDeath.php";
     [SerializeField] string playerTrackURL = "https://citmalumnes.upc.es/~xavierlm9/PlayerTrack.php";
 
     public List<PlayerGetsDamageData> PlayerGetsDamageDataList = new();
-    public List<EnemyGetsDamageData> EnemyGetsDamageDataList = new();
+    public List<EnemyDeathData> EnemyGetsDamageDataList = new();
     public List<PlayerDeathData> PlayerDeathDataList = new();
     public List<SessionsData> SessionsDataList = new();
     public List<PlayerTrackData> PlayerTrackDataList = new();
@@ -172,8 +177,9 @@ public class ReceiveData : MonoBehaviour
     {
         WWWForm form = new();
         form.AddField("methodToCall", "Get Info");
+        form.AddField("isEnemy", true.ToString());
 
-        UnityWebRequest www = UnityWebRequest.Post(enemyGetsDmgURL, form);
+        UnityWebRequest www = UnityWebRequest.Post(playerDeathURL, form);
 
         yield return www.SendWebRequest();
 
@@ -190,7 +196,7 @@ public class ReceiveData : MonoBehaviour
                 if (!string.IsNullOrEmpty(row))
                 {
                     // Deserializar la fila actual
-                    EnemyGetsDamageData dataObject = JsonUtility.FromJson<EnemyGetsDamageData>(row);
+                    EnemyDeathData dataObject = JsonUtility.FromJson<EnemyDeathData>(row);
                     EnemyGetsDamageDataList.Add(dataObject);
                 }
             }
@@ -205,6 +211,7 @@ public class ReceiveData : MonoBehaviour
     {
         WWWForm form = new();
         form.AddField("methodToCall", "Get Info");
+        form.AddField("isEnemy", false.ToString());
 
         UnityWebRequest www = UnityWebRequest.Post(playerDeathURL, form);
 
