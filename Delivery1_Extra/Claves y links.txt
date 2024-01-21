@@ -11,6 +11,12 @@ xavierlm9        zMpmB6Drtvc2
 
 xaviercb12	8QGQefMvS38H
 
+TRUNCATE EnemyDeath;
+TRUNCATE PlayerDeath;
+TRUNCATE PlayerGetsDamage;
+TRUNCATE PlayerTrack;
+TRUNCATE Sessions;
+
 INSERT INTO `Users`( `User_Name`, `User_Age`, `User_Gender`, `User_Country`, `Sign_Up_Time`) VALUES ("lolo",23,"F","Spain",'1998-01-23 12:45:56')
 
 TRUNCATE Purchases;

@@ -12,10 +12,18 @@ namespace Gamekit3D
 
         void OnTriggerEnter(Collider other)
         {
-            var pc = other.GetComponent<PlayerController>();
+            var pc = other.GetComponent<Damageable>();
             if (pc != null)
             {
-                pc.Die(new Damageable.DamageMessage());
+                var msg = new Damageable.DamageMessage()
+                {
+                    amount = 69,
+                    damager = this,
+                    direction = Vector3.up,
+                    stopCamera = true
+                };
+
+                pc.ApplyDamage(msg);
             }
             if (audio != null)
             {

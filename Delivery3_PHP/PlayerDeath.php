@@ -35,20 +35,26 @@ else
 
 function UpdateData() {
 
-   // Acceder a los datos enviados desde Unity
-   $timeStamp = $_POST["timeStamp"];
-   $posX = $_POST["posX"];
-   $posY = $_POST["posY"];
-   $posZ = $_POST["posZ"];
-   $damageCause = $_POST["damageCause"];
+    $user = $_POST["user"];
+    $entity = $_POST["entity"];
+    $timeStamp = $_POST["timeStamp"];
+    $posX = $_POST["posX"];
+    $posY = $_POST["posY"];
+    $posZ = $_POST["posZ"];
+    $deathCause = $_POST["deathCause"];
 
     global $conn;
 
-    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$damageCause')";    
+    if($entity === 'Ellen'){
+        $sql = "INSERT INTO PlayerDeath (user_id, Timestamp, PosX, PosY, PosZ, DeathCause) VALUES ($user,'$timeStamp',$posX, $posY, $posZ,'$deathCause')";   
+    }
+    else{
+        $sql = "INSERT INTO EnemyDeath (entity_id, Timestamp, PosX, PosY, PosZ, DeathCause) VALUES ($entity,'$timeStamp',$posX, $posY, $posZ,'$deathCause')";   
+    }
 
     if ($conn->query($sql) === TRUE) 
     {
-        echo "Data Sent";
+        echo "Death Data Sent";
     } 
     else 
     {

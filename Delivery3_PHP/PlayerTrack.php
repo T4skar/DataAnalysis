@@ -35,20 +35,22 @@ else
 
 function UpdateData() {
 
-   // Acceder a los datos enviados desde Unity
-   $timeStamp = $_POST["timeStamp"];
-   $posX = $_POST["posX"];
-   $posY = $_POST["posY"];
-   $posZ = $_POST["posZ"];
-   $damageCause = $_POST["damageCause"];
+    $user = $_POST["user"];
+    $timeStamp = $_POST["timeStamp"];
+    $posX = $_POST["posX"];
+    $posY = $_POST["posY"];
+    $posZ = $_POST["posZ"];
+    $rotX = $_POST["rotX"];
+    $rotY = $_POST["rotY"];
+    $rotZ = $_POST["rotZ"];
 
     global $conn;
 
-    $sql = "INSERT INTO PlayerGetsDamage (Timestamp, PosX, PosY, PosZ, DamageCause) VALUES ('$timeStamp',$posX, $posY, $posZ,'$damageCause')";    
+    $sql = "INSERT INTO PlayerTrack (user_id, timestamp, posX, posY, posZ, rotX, rotY, rotZ) VALUES ($user, '$timeStamp',$posX, $posY, $posZ, $rotX, $rotY, $rotZ)";    
 
     if ($conn->query($sql) === TRUE) 
     {
-        echo "Data Sent";
+        echo "Tracking Data Sent";
     } 
     else 
     {
