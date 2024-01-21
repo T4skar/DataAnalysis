@@ -131,10 +131,10 @@ public class ReceiveData : MonoBehaviour
 
         //Enable functions only when the tables are not empty
         StartCoroutine(Receive_PlayerGetsDamageData());
-        //StartCoroutine(Receive_EnemyGetsDamageData());
-        //StartCoroutine(Receive_PlayerDeathData());
-        //StartCoroutine(Receive_SessionsData());
-        //StartCoroutine(Receive_PlayerTrackData());
+        StartCoroutine(Receive_EnemyGetsDamageData());
+        StartCoroutine(Receive_PlayerDeathData());
+        StartCoroutine(Receive_SessionsData());
+        StartCoroutine(Receive_PlayerTrackData());
     }
 
     #region receive methods
