@@ -3,22 +3,69 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HeatMapGenerator : MonoBehaviour
 {
 
+    public TestClass[] dataarray = new TestClass[]
+   {
+        new TestClass{Position=new Vector3(33.23f,23,232.333f),EventName="Object Position"},
+        new TestClass{Position=new Vector3(3544.23f,233,233.333f),EventName="Object Position"},
+        new TestClass{Position=new Vector3(23.23f,23,2432.333f),EventName="Object Position"}
+   };
 
+    TestClass[] PlayerGetsDamage = null;
+    List<TestClass> PlayerGetsDamage2 = new();
+    TestClass[] EnemyGetsDamage = null;
+    TestClass[] PlayerDeath = null;
+    TestClass[] Sessions = null;
+    TestClass[] PlayerTrack = null;
 
+    public string eventName = "Object Position";
+    public string folderPath = "Json_TXT/";
+
+    public string trackJsonPath = "Json_TXT/trackJson";
+    public string trackTxtPath = "Json_TXT/trackTxt";
+
+    public string pDeathJsonPath = "Json_TXT/pDeathJson";
+    public string pDeathTxtPath = "Json_TXT/pDeathTxt";
+
+    public string eDmgJsonPath = "Json_TXT/eDmgJson";
+    public string eDmgTxtPath = "Json_TXT/eDmgTxt";
+
+    public string pDmgJsonPath = "Json_TXT/pDmgJson";
+    public string pDmgTxtPath = "Json_TXT/pDmgTxt";
+
+    
     // Start is called before the first frame update
     void Start()
     {
+       
+    }
+
+    public void GenerateFiles()
+    {
         try
         {
-            string jsonPath = "PlayerPathJson";
-            string txtPath = "PlayerPathTxt";
 
-            SerializeJsonList3(dataarray, jsonPath);
-            JsonToTxtConverter(jsonPath, txtPath);
+            int dmgCount = 0;
+            PlayerGetsDamage = new TestClass[ReceiveData.Instance.PlayerGetsDamageDataList.Count];
+            foreach (PlayerGetsDamageData item in ReceiveData.Instance.PlayerGetsDamageDataList)
+            {
+                //PlayerGetsDamage[dmgCount]= ( Position = new Vector3(item.posX, item.posY, item.posZ),EventName = eventName )
+                PlayerGetsDamage[dmgCount].Position = new Vector3(item.posX, item.posY, item.posZ);
+                PlayerGetsDamage[dmgCount].EventName = eventName;
+                
+                dmgCount++;
+            }
+            Debug.Log("Lista de player damage bien");
+            
+            Debug.Log("Lista to Json todo bien");
+
+            SerializeJsonList3(PlayerGetsDamage, pDmgJsonPath);
+            JsonToTxtConverter(pDmgJsonPath, pDmgTxtPath);
+
             Debug.Log("Ha FUNCIONADO el escribir en JASON");
         }
         catch
@@ -26,22 +73,153 @@ public class HeatMapGenerator : MonoBehaviour
         {
             Debug.Log("Ha fallado el escribir en JASON");
         }
+
+        //try
+        //{
+        //    int deathCount = 0;
+        //    foreach (PlayerDeathData item in ReceiveData.Instance.PlayerDeathDataList)
+        //    {
+        //        PlayerDeath[deathCount].Position = new Vector3(item.posX, item.posY, item.posZ);
+        //        PlayerDeath[deathCount].EventName = eventName;
+        //        deathCount++;
+
+        //    }
+        //    Debug.Log("Lista de player death bien");
+        //    Debug.Log("Lista to Json todo bien");
+
+        //    SerializeJsonList3(PlayerDeath, pDeathJsonPath);
+        //    JsonToTxtConverter(pDeathJsonPath, pDeathTxtPath);
+
+        //    Debug.Log("Ha FUNCIONADO el escribir en JASON");
+        //}
+        //catch
+
+        //{
+        //    Debug.Log("Ha fallado el escribir en JASON");
+        //}
+        //try
+        //{ 
+        //    int enemyCount = 0;
+        //    foreach (EnemyGetsDamageData item in ReceiveData.Instance.EnemyGetsDamageDataList)
+        //    {
+        //        EnemyGetsDamage[enemyCount].Position = new Vector3(item.PosX, item.PosY, item.PosZ);
+        //        EnemyGetsDamage[enemyCount].EventName = eventName;
+        //        enemyCount++;
+        //    }
+        //    Debug.Log("Lista de enemigo damage bien");
+
+        //    Debug.Log("Lista to Json todo bien");
+
+        //    SerializeJsonList3(EnemyGetsDamage, eDmgJsonPath);
+        //    JsonToTxtConverter(eDmgJsonPath, eDmgTxtPath);
+
+        //    Debug.Log("Ha FUNCIONADO el escribir en JASON");
+        //}
+        //catch
+        //{
+        //    Debug.Log("Ha fallado el escribir en JASON");
+        //}
+
+        //try
+        //{
+        //    int trackCount = 0;
+        //    foreach (PlayerTrackData item in ReceiveData.Instance.PlayerTrackDataList)
+        //    {
+        //        PlayerTrack[trackCount].Position = new Vector3(item.Pos_X, item.Pos_Y, item.Pos_Z);
+        //        PlayerTrack[trackCount].EventName = eventName;
+        //        trackCount++;
+        //    }
+        //    Debug.Log("Lista de player track bien");
+
+        //    Debug.Log("Lista to Json todo bien");
+
+        //    SerializeJsonList3(PlayerTrack, trackJsonPath);
+        //    JsonToTxtConverter(trackJsonPath, trackTxtPath);
+
+        //    Debug.Log("Ha FUNCIONADO el escribir en JASON");
+        //}
+        //catch
+
+        //{
+        //    Debug.Log("Ha fallado el escribir en JASON");
+        //}
+
+        /*
+        try
+        {
+
+            int dmgCount = 0;
+            foreach (PlayerGetsDamageData item in ReceiveData.Instance.PlayerGetsDamageDataList)
+            {
+                PlayerGetsDamage[dmgCount].Position = new Vector3(item.posX, item.posY, item.posZ);
+                PlayerGetsDamage[dmgCount].EventName = eventName;
+                dmgCount++;
+            }
+            Debug.Log("Lista de player damage bien");
+            int deathCount = 0;
+            foreach (PlayerDeathData item in ReceiveData.Instance.PlayerDeathDataList)
+            {
+                PlayerDeath[deathCount].Position = new Vector3(item.posX, item.posY, item.posZ);
+                PlayerDeath[deathCount].EventName = eventName;
+                deathCount++;
+
+            }
+            Debug.Log("Lista de player death bien");
+            int enemyCount = 0;
+            foreach (EnemyGetsDamageData item in ReceiveData.Instance.EnemyGetsDamageDataList)
+            {
+                EnemyGetsDamage[enemyCount].Position = new Vector3(item.PosX, item.PosY, item.PosZ);
+                EnemyGetsDamage[enemyCount].EventName = eventName;
+                enemyCount++;
+            }
+            Debug.Log("Lista de enemigo damage bien");
+            int trackCount = 0;
+            foreach (PlayerTrackData item in ReceiveData.Instance.PlayerTrackDataList)
+            {
+                PlayerTrack[trackCount].Position = new Vector3(item.Pos_X, item.Pos_Y, item.Pos_Z);
+                PlayerTrack[trackCount].EventName = eventName;
+                trackCount++;
+            }
+            Debug.Log("Lista de player track bien");
+
+            Debug.Log("Lista to Json todo bien");
+            //foreach (SessionsData item in ReceiveData.Instance.SessionsDataList)
+            //{
+            //    Sessions[1].Position = new Vector3(item., item.Pos_Y, item.Pos_Z);
+            //    Sessions[1].EventName = eventName;
+            //}
+
+            SerializeJsonList3(PlayerTrack, trackJsonPath);
+            JsonToTxtConverter(trackJsonPath, trackTxtPath);
+
+            SerializeJsonList3(PlayerGetsDamage, pDmgJsonPath);
+            JsonToTxtConverter(pDmgJsonPath, pDmgTxtPath);
+
+            SerializeJsonList3(PlayerDeath, pDeathJsonPath);
+            JsonToTxtConverter(pDeathJsonPath, pDeathTxtPath);
+
+            SerializeJsonList3(EnemyGetsDamage, eDmgJsonPath);
+            JsonToTxtConverter(eDmgJsonPath, eDmgTxtPath);
+
+
+            Debug.Log("Ha FUNCIONADO el escribir en JASON");
+        }
+        catch
+
+        {
+            Debug.Log("Ha fallado el escribir en JASON");
+        }
+        */
+
     }
 
-
-
-    //[SerializeField]
-    //public List<TestClass> testlist = new List<TestClass>();
-
-    public TestClassList testlist = new TestClassList();
-    public TestClass[] dataarray = new TestClass[]
-    {
-        new TestClass{Position=new Vector3(33.23f,23,232.333f),EventName="Object Position"},
-        new TestClass{Position=new Vector3(3544.23f,233,233.333f),EventName="Object Position"},
-        new TestClass{Position=new Vector3(23.23f,23,2432.333f),EventName="Object Position"}
-    };
-
-    public TestClasslis2 testClasslis2 = new TestClasslis2();
+    //private void ListToArray<T>(List<T> list, TestClass[] array)
+    //{
+    //    for (int i = 0; i < list.Count; i++)
+    //    {
+    //        array[i] = list.
+    //    }
+    //}
 
     void SerializeJsonList3(TestClass[] itemJson, string pathjson)
     {
@@ -75,64 +253,8 @@ public class HeatMapGenerator : MonoBehaviour
 
         // Guardar la cadena JSON como un archivo de texto
         File.WriteAllText(filePathTxt, jsonContent);
+
         Debug.Log("TXT data saved to: " + filePathTxt);
-    }
-
-    void SerializeJson()
-    {
-        string filePath = "Assets/playerData2.json";
-        var t = new TestClass();
-        string a;
-
-        t.Position = new Vector3(12.123f, 23.2f, 333.3f);
-        t.EventName = "Object Position";
-        // a = "\"Position\":{\"x\":" + t.posX.ToString() + ",\"y\":" + t.posY.ToString() + ",\"z\":" + t.posX.ToString() + "},\"EventName\":\"Object Position\"";
-        string json = JsonUtility.ToJson(t);
-        Stream stream = new MemoryStream();
-        //BinaryWriter writer = new BinaryWriter(stream);
-        //writer.Write(json);
-        StreamWriter writer2 = new StreamWriter("Assets/playerData2.json", true);
-        writer2.Write(json);
-        // Path to save the JSON file
-
-        // Write the JSON string to a text file
-        File.WriteAllText(filePath, json);
-
-        // Debug.Log("JSON data saved to: " + filePath);
-    }
-    void SerializeJsonList()
-    {
-
-        // a = "\"Position\":{\"x\":" + t.posX.ToString() + ",\"y\":" + t.posY.ToString() + ",\"z\":" + t.posX.ToString() + "},\"EventName\":\"Object Position\"";
-        string json = JsonUtility.ToJson(testlist);
-        Stream stream = new MemoryStream();
-        BinaryWriter writer = new BinaryWriter(stream);
-        writer.Write(json);
-
-        // Path to save the JSON file
-        string filePath = /*Application.persistentDataPath +*/ "Assets/playerDataList.json";
-
-        // Write the JSON string to a text file
-        File.WriteAllText(filePath, json);
-
-        Debug.Log("JSON data saved to: " + filePath);
-    }
-    void SerializeJsonList2()
-    {
-
-        // a = "\"Position\":{\"x\":" + t.posX.ToString() + ",\"y\":" + t.posY.ToString() + ",\"z\":" + t.posX.ToString() + "},\"EventName\":\"Object Position\"";
-        string json = JsonUtility.ToJson(testClasslis2);
-        Stream stream = new MemoryStream();
-        BinaryWriter writer = new BinaryWriter(stream);
-        writer.Write(json);
-
-        // Path to save the JSON file
-        string filePath = /*Application.persistentDataPath +*/ "Assets/playerDataList4.json";
-
-        // Write the JSON string to a text file
-        File.WriteAllText(filePath, json);
-
-        Debug.Log("JSON data saved to: " + filePath);
     }
 
 
@@ -140,25 +262,14 @@ public class HeatMapGenerator : MonoBehaviour
 [System.Serializable]
 public class TestClass
 {
-    //public float posX;
-    //public float posY;
-    //public float posZ;
 
     public Vector3 Position;
     public string EventName;
 }
-[System.Serializable]
-public class TestClasslis2
-{
-    //public float posX;
-    //public float posY;
-    //public float posZ;
 
-    public List<Vector3> Position;
-    public List<string> EventName;
-}
-[System.Serializable]
-public class TestClassList
+public class TableLists
 {
-    public TestClass[] test;
+    public int playerId;
+    public TestClass[] arrayList;
+
 }

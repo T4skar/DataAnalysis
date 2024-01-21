@@ -104,7 +104,18 @@ public class ReceiveData : MonoBehaviour
     public List<SessionsData> SessionsDataList = new();
     public List<PlayerTrackData> PlayerTrackDataList = new();
 
-
+    public static ReceiveData Instance;
+    public void OnEnable()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void Start()
     {
         PlayerGetsDamageDataList.Clear();
