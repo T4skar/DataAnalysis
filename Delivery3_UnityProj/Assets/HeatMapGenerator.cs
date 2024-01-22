@@ -15,12 +15,12 @@ public class HeatMapGenerator : MonoBehaviour
     //     new TestClass{Position=new Vector3(23.23f,23,2432.333f),EventName="Object Position"}
     //};
 
-    TestClass[] PlayerGetsDamage = null;
-    //List<TestClass> PlayerGetsDamage2 = new();
-    TestClass[] EnemyGetsDamage = null;
-    TestClass[] PlayerDeath = null;
-    TestClass[] Sessions = null;
-    TestClass[] PlayerTrack = null;
+    //TestClass[] PlayerGetsDamage = null;
+    ////List<TestClass> PlayerGetsDamage2 = new();
+    //TestClass[] EnemyGetsDamage = null;
+    //TestClass[] PlayerDeath = null;
+    //TestClass[] Sessions = null;
+    //TestClass[] PlayerTrack = null;
 
     public string eventName = "Object Position";
     public string folderPath = "Json_TXT/";
@@ -46,7 +46,7 @@ public class HeatMapGenerator : MonoBehaviour
     {
 
     }
-
+    /*
     public void GenerateFiles()
     {
         try
@@ -220,10 +220,10 @@ public class HeatMapGenerator : MonoBehaviour
         {
             Debug.Log("Ha fallado el escribir en JASON");
         }
-        */
+        
 
     }
-
+    */
     void SerializeJsonList3(TestClass[] itemJson, string pathjson)
     {
 
@@ -236,9 +236,12 @@ public class HeatMapGenerator : MonoBehaviour
             foreach (TestClass item in itemJson)
             {
 
-                string json = JsonUtility.ToJson(item);
+                if (item!=null)
+                {
+                    string json = JsonUtility.ToJson(item);
 
-                writer.WriteLine(json);
+                    writer.WriteLine(json);
+                } 
             }
         }
 
@@ -283,23 +286,23 @@ public class HeatMapGenerator : MonoBehaviour
 
 
                 int trackCount = 0;
-                PlayerTrack= null;
-                PlayerTrack = new TestClass[ReceiveData.Instance.PlayerTrackDataList.Count];
+
+                TestClass[]  PlayerTrack = new TestClass[ReceiveData.Instance.PlayerTrackDataList.Count];
                 foreach (PlayerTrackData item in ReceiveData.Instance.PlayerTrackDataList)
                 {
                     if (userIDInt == -1)
                     {
-                        PTrackArray(trackCount, item);
+                        PTrackArray(trackCount, item, PlayerTrack);
                     }
                     else if (userIDInt == item.user_id)
                     {
-                        PTrackArray(trackCount, item);
+                        PTrackArray(trackCount, item, PlayerTrack);
                     }
                     trackCount++;
                 }
                 Debug.Log("Lista de player track bien");
 
-                SerializeJsonList3(PlayerTrack, trackJsonPath);
+                SerializeJsonList3(PlayerTrack, dataPathJson);
 
                 Debug.Log("Ha FUNCIONADO el escribir en JASON");
                 break;
@@ -309,18 +312,18 @@ public class HeatMapGenerator : MonoBehaviour
                 string playerDeathCause = ReceiveData.Instance.playerDeathCausesDropDown.options[ReceiveData.Instance.playerDeathCausesDropDown.value].text.ToString();
 
                 int deathCount = 0;
-                PlayerDeath = null;
+                TestClass[] PlayerDeath = null;
                 PlayerDeath = new TestClass[ReceiveData.Instance.PlayerDeathDataList.Count];
                 foreach (PlayerDeathData item in ReceiveData.Instance.PlayerDeathDataList)
                 {
                     if (userIDInt == -1)
                     {
-                        pDeathArrray(playerDeathCause, deathCount, item);
+                        pDeathArrray(playerDeathCause, deathCount, item, PlayerDeath);
 
                     }
                     else if (userIDInt == item.user_id)
                     {
-                        pDeathArrray(playerDeathCause, deathCount, item);
+                        pDeathArrray(playerDeathCause, deathCount, item, PlayerDeath);
                     }
                     deathCount++;
 
@@ -339,16 +342,16 @@ public class HeatMapGenerator : MonoBehaviour
                 string playerGetsDamageCause = ReceiveData.Instance.playerGetsDmgCausesDropDown.options[ReceiveData.Instance.playerGetsDmgCausesDropDown.value].text.ToString();
 
                 int dmgCount = 0;
-                PlayerGetsDamage = new TestClass[ReceiveData.Instance.PlayerGetsDamageDataList.Count];
+                TestClass[] PlayerGetsDamage = new TestClass[ReceiveData.Instance.PlayerGetsDamageDataList.Count];
                 foreach (PlayerGetsDamageData item in ReceiveData.Instance.PlayerGetsDamageDataList)
                 {
                     if (userIDInt == -1)
                     {
-                        pDmgArray(playerGetsDamageCause, dmgCount, item);
+                        pDmgArray(playerGetsDamageCause, dmgCount, item, PlayerGetsDamage);
                     }
                     else if (userIDInt == item.user_id)
                     {
-                        pDmgArray(playerGetsDamageCause, dmgCount, item);
+                        pDmgArray(playerGetsDamageCause, dmgCount, item, PlayerGetsDamage);
                     }
                     dmgCount++;
                 }
@@ -366,16 +369,16 @@ public class HeatMapGenerator : MonoBehaviour
                 string enemyDeaths = ReceiveData.Instance.enemyDeathCausesDropDown.options[ReceiveData.Instance.enemyDeathCausesDropDown.value].text.ToString();
 
                 int enemyCount = 0;
-                EnemyGetsDamage = new TestClass[ReceiveData.Instance.EnemyGetsDamageDataList.Count];
+                TestClass[] EnemyGetsDamage = new TestClass[ReceiveData.Instance.EnemyGetsDamageDataList.Count];
                 foreach (EnemyDeathData item in ReceiveData.Instance.EnemyGetsDamageDataList)
                 {
                     if (userIDInt == -1)
                     {
-                        EnemyArray(enemyDeaths, enemyCount, item);
+                        EnemyArray(enemyDeaths, enemyCount, item, EnemyGetsDamage);
                     }
                     else if (userIDInt == item.user_id)
                     {
-                        EnemyArray(enemyDeaths, enemyCount, item);
+                        EnemyArray(enemyDeaths, enemyCount, item, EnemyGetsDamage);
                     }
                     enemyCount++;
                 }
@@ -390,12 +393,12 @@ public class HeatMapGenerator : MonoBehaviour
         JsonToTxtConverter(dataPathJson, dataPathTxt);
     }
 
-    private void PTrackArray(int trackCount, PlayerTrackData item)
+    private void PTrackArray(int trackCount, PlayerTrackData item, TestClass[] PlayerTrack)
     {
         PlayerTrack[trackCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
     }
 
-    private void pDeathArrray(string playerDeathCause, int deathCount, PlayerDeathData item)
+    private void pDeathArrray(string playerDeathCause, int deathCount, PlayerDeathData item, TestClass[] PlayerDeath)
     {
         if (playerDeathCause == "All")
         {
@@ -408,7 +411,7 @@ public class HeatMapGenerator : MonoBehaviour
         }
     }
 
-    private void pDmgArray(string playerGetsDamageCause, int dmgCount, PlayerGetsDamageData item)
+    private void pDmgArray(string playerGetsDamageCause, int dmgCount, PlayerGetsDamageData item, TestClass[] PlayerGetsDamage)
     {
         if (playerGetsDamageCause == "All")
         {
@@ -421,7 +424,7 @@ public class HeatMapGenerator : MonoBehaviour
         }
     }
 
-    private void EnemyArray(string enemyDeaths, int enemyCount, EnemyDeathData item)
+    private void EnemyArray(string enemyDeaths, int enemyCount, EnemyDeathData item, TestClass[] EnemyGetsDamage)
     {
         if (enemyDeaths == "All")
         {
