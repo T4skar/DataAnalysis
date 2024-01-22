@@ -8,12 +8,12 @@ using UnityEngine.UIElements;
 public class HeatMapGenerator : MonoBehaviour
 {
 
-   // public TestClass[] dataarray = new TestClass[]
-   //{
-   //     new TestClass{Position=new Vector3(33.23f,23,232.333f),EventName="Object Position"},
-   //     new TestClass{Position=new Vector3(3544.23f,233,233.333f),EventName="Object Position"},
-   //     new TestClass{Position=new Vector3(23.23f,23,2432.333f),EventName="Object Position"}
-   //};
+    // public TestClass[] dataarray = new TestClass[]
+    //{
+    //     new TestClass{Position=new Vector3(33.23f,23,232.333f),EventName="Object Position"},
+    //     new TestClass{Position=new Vector3(3544.23f,233,233.333f),EventName="Object Position"},
+    //     new TestClass{Position=new Vector3(23.23f,23,2432.333f),EventName="Object Position"}
+    //};
 
     TestClass[] PlayerGetsDamage = null;
     //List<TestClass> PlayerGetsDamage2 = new();
@@ -24,6 +24,9 @@ public class HeatMapGenerator : MonoBehaviour
 
     public string eventName = "Object Position";
     public string folderPath = "Json_TXT/";
+
+    public string dataPathJson = "Json_TXT/dataHeatmapJson";
+    public string dataPathTxt = "Json_TXT/dataHeatmapTxt";
 
     public string trackJsonPath = "Json_TXT/trackJson";
     public string trackTxtPath = "Json_TXT/trackTxt";
@@ -37,11 +40,11 @@ public class HeatMapGenerator : MonoBehaviour
     public string pDmgJsonPath = "Json_TXT/pDmgJson";
     public string pDmgTxtPath = "Json_TXT/pDmgTxt";
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
-       
+
     }
 
     public void GenerateFiles()
@@ -57,11 +60,11 @@ public class HeatMapGenerator : MonoBehaviour
                 PlayerGetsDamage[dmgCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
                 //PlayerGetsDamage[dmgCount].Position = new Vector3(item.posX, item.posY, item.posZ);
                 //PlayerGetsDamage[dmgCount].EventName = eventName;
-                
+
                 dmgCount++;
             }
             Debug.Log("Lista de player damage bien");
-            
+
             Debug.Log("Lista to Json todo bien");
 
             SerializeJsonList3(PlayerGetsDamage, pDmgJsonPath);
@@ -229,6 +232,7 @@ public class HeatMapGenerator : MonoBehaviour
 
         using (StreamWriter writer = new StreamWriter(filePathJson))
         {
+
             foreach (TestClass item in itemJson)
             {
 
@@ -260,7 +264,7 @@ public class HeatMapGenerator : MonoBehaviour
 
     public void TakeDropdownOptions()
     {
-        
+       
 
         string heatmapType = ReceiveData.Instance.heatmapType.options[ReceiveData.Instance.heatmapType.value].text.ToString();
 
@@ -268,7 +272,7 @@ public class HeatMapGenerator : MonoBehaviour
 
         int userIDInt = -1;
 
-        if(userID != "All")
+        if (userID != "All")
         {
             userIDInt = int.Parse(userID);
         }
@@ -277,17 +281,83 @@ public class HeatMapGenerator : MonoBehaviour
         {
             case "Player Tracks":
 
+
+                int trackCount = 0;
+                PlayerTrack= null;
+                PlayerTrack = new TestClass[ReceiveData.Instance.PlayerTrackDataList.Count];
+                foreach (PlayerTrackData item in ReceiveData.Instance.PlayerTrackDataList)
+                {
+                    if (userIDInt == -1)
+                    {
+                        PTrackArray(trackCount, item);
+                    }
+                    else if (userIDInt == item.user_id)
+                    {
+                        PTrackArray(trackCount, item);
+                    }
+                    trackCount++;
+                }
+                Debug.Log("Lista de player track bien");
+
+                SerializeJsonList3(PlayerTrack, trackJsonPath);
+
+                Debug.Log("Ha FUNCIONADO el escribir en JASON");
                 break;
 
             case "Player Deaths":
 
                 string playerDeathCause = ReceiveData.Instance.playerDeathCausesDropDown.options[ReceiveData.Instance.playerDeathCausesDropDown.value].text.ToString();
-                
+
+                int deathCount = 0;
+                PlayerDeath = null;
+                PlayerDeath = new TestClass[ReceiveData.Instance.PlayerDeathDataList.Count];
+                foreach (PlayerDeathData item in ReceiveData.Instance.PlayerDeathDataList)
+                {
+                    if (userIDInt == -1)
+                    {
+                        pDeathArrray(playerDeathCause, deathCount, item);
+
+                    }
+                    else if (userIDInt == item.user_id)
+                    {
+                        pDeathArrray(playerDeathCause, deathCount, item);
+                    }
+                    deathCount++;
+
+                }
+                Debug.Log("Lista de player death bien");
+
+                SerializeJsonList3(PlayerDeath, dataPathJson);
+
+
+                Debug.Log("Ha FUNCIONADO el escribir en JASON");
+
                 break;
 
             case "Player Gets Damage":
 
                 string playerGetsDamageCause = ReceiveData.Instance.playerGetsDmgCausesDropDown.options[ReceiveData.Instance.playerGetsDmgCausesDropDown.value].text.ToString();
+
+                int dmgCount = 0;
+                PlayerGetsDamage = new TestClass[ReceiveData.Instance.PlayerGetsDamageDataList.Count];
+                foreach (PlayerGetsDamageData item in ReceiveData.Instance.PlayerGetsDamageDataList)
+                {
+                    if (userIDInt == -1)
+                    {
+                        pDmgArray(playerGetsDamageCause, dmgCount, item);
+                    }
+                    else if (userIDInt == item.user_id)
+                    {
+                        pDmgArray(playerGetsDamageCause, dmgCount, item);
+                    }
+                    dmgCount++;
+                }
+                Debug.Log("Lista de player damage bien");
+
+                SerializeJsonList3(PlayerGetsDamage, dataPathJson);
+
+
+                Debug.Log("Ha FUNCIONADO el escribir en JASON");
 
                 break;
 
@@ -295,11 +365,74 @@ public class HeatMapGenerator : MonoBehaviour
 
                 string enemyDeaths = ReceiveData.Instance.enemyDeathCausesDropDown.options[ReceiveData.Instance.enemyDeathCausesDropDown.value].text.ToString();
 
+                int enemyCount = 0;
+                EnemyGetsDamage = new TestClass[ReceiveData.Instance.EnemyGetsDamageDataList.Count];
+                foreach (EnemyDeathData item in ReceiveData.Instance.EnemyGetsDamageDataList)
+                {
+                    if (userIDInt == -1)
+                    {
+                        EnemyArray(enemyDeaths, enemyCount, item);
+                    }
+                    else if (userIDInt == item.user_id)
+                    {
+                        EnemyArray(enemyDeaths, enemyCount, item);
+                    }
+                    enemyCount++;
+                }
+                Debug.Log("Lista de enemigo damage bien");
+
+                SerializeJsonList3(EnemyGetsDamage, dataPathJson);
+
+
+                Debug.Log("Ha FUNCIONADO el escribir en JASON");
                 break;
         }
-
+        JsonToTxtConverter(dataPathJson, dataPathTxt);
     }
 
+    private void PTrackArray(int trackCount, PlayerTrackData item)
+    {
+        PlayerTrack[trackCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
+    }
+
+    private void pDeathArrray(string playerDeathCause, int deathCount, PlayerDeathData item)
+    {
+        if (playerDeathCause == "All")
+        {
+            PlayerDeath[deathCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
+        }
+        else if (playerDeathCause == item.deathCause)
+        {
+
+            PlayerDeath[deathCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
+        }
+    }
+
+    private void pDmgArray(string playerGetsDamageCause, int dmgCount, PlayerGetsDamageData item)
+    {
+        if (playerGetsDamageCause == "All")
+        {
+
+            PlayerGetsDamage[dmgCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
+        }
+        else if (playerGetsDamageCause == item.damageCause)
+        {
+            PlayerGetsDamage[dmgCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
+        }
+    }
+
+    private void EnemyArray(string enemyDeaths, int enemyCount, EnemyDeathData item)
+    {
+        if (enemyDeaths == "All")
+        {
+            EnemyGetsDamage[enemyCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
+
+        }
+        else if (enemyDeaths == item.deathCause)
+        {
+            EnemyGetsDamage[enemyCount] = new TestClass { Position = new Vector3(item.posX, item.posY, item.posZ), EventName = eventName };
+        }
+    }
 
 }
 [System.Serializable]
