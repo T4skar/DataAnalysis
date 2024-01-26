@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
+using static Gamekit3D.EffectEvents;
 using Debug = UnityEngine.Debug;
 
 public class HeatmapController : MonoBehaviour
@@ -31,12 +34,22 @@ public class HeatmapController : MonoBehaviour
 
     private bool eventsAreLoaded = false;
     private bool particleSystemIsInitialized = false;
-
+    public HeatmapController Instance;
     private void Awake()
     {
         heatmapVisualisation = new HeatmapVisualisation(settings);
     }
-
+    public void OnEnable()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     /// <summary>
     /// Loads events from file into events property (that also makes them display in heatmap configuration)
     /// </summary>
@@ -109,9 +122,25 @@ public class HeatmapController : MonoBehaviour
         heatmapVisualisation.UpdateParticlesInParticleSystem();
 
         stopwatch.Stop();
+        Debug.Log("Almondiga" );
         Debug.Log("AddEventsToHeatMap  - Elapsed Time is " + stopwatch.ElapsedMilliseconds + " ms");
     }
+     public void GenerateHeatMap()
+    {
+        if (events!=null)
+        {
+            foreach (EventData item in events)
+            {
+                if (item!=null)
+                {
+                    item.ShouldEventBeVisualised = true;
+                    //item.ShouldEventBeVisualised = EditorGUILayout.Toggle(item.EventName, item.ShouldEventBeVisualised);
 
+                }
+            } 
+        }
+        //AddSelectedEventsToHeatmap();
+    }
     /// <summary>
     /// Status of Load Events action. (see HeatmapGUI.cs for usage))
     /// </summary>
